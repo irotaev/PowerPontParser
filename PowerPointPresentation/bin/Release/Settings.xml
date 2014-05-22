@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <ExportDBInfo>
+    <DBRemoteHost>mysql-srv35659.ht-systems.ru</DBRemoteHost>
+    <DBName>srv35659_test</DBName>
+    <DBUser>srv35659_tester</DBUser>
+    <DBPassword>re5ts2b</DBPassword>
+  </ExportDBInfo>
+
+  <ExportFtpInfo>
+    <Host>ftp-srv35659.ht-systems.ru</Host>
+    <UserName>srv35659</UserName>
+    <UserPassword>HA6uHp7J</UserPassword>
+    <ImagesDir>DEL</ImagesDir>
+  </ExportFtpInfo>
+</root>

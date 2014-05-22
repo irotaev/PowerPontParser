@@ -1,0 +1,37 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly PowerPointPresentationCPP, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class PowerPointPresentationCPP.SlideInfo: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Int32 SlideNumber : Public
+    System.String Text : Public
+    System.String ImageNameSmall : Public
+    System.String ImageNameAverage : Public
+    System.String ImageNameBig : Public
+Class PowerPointPresentationCPP.PresentationInfo: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String UniqueId : Public
+    System.Collections.Generic.List`1[PowerPointPresentationCPP.SlideInfo] SlidersInfo : Public
+    System.String Name : Public
+    System.String Title : Public
+    System.String CategorieName : Public
+    System.String CategorieCode : Public
+Class PowerPointPresentationCPP.MySqlPresentationHost: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, System.String, System.String, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    PutDataOnServer(PresentationInfo): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig

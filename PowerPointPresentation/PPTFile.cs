@@ -30,7 +30,7 @@ namespace PowerPointPresentation
     public static string[] SupportedPowerPointFileFormats { get { return _SupportedPowerPointFileFormats.ToArray(); } }
 
     private static readonly string[] _SupportedArchiveFormats = new string[] { ".rar", ".zip", ".7z", ".gzip", ".gz", ".tgz", ".bz2", ".bzip2", ".tbz2", ".tbz", ".tar", ".rpm", ".iso", ".deb", ".cab" };
-    private static readonly string[] _SupportedPowerPointFileFormats = new string[] { ".ppt", ".pptx", ".pps", ".ppsx" };
+    private static readonly string[] _SupportedPowerPointFileFormats = new string[] { ".ppt", ".pptx", ".pps", ".ppsx", ".odp" };
     private const string _External7ZipLib = "Lib/7z.dll";
     private static readonly string _ExtractDir;
 
