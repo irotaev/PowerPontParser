@@ -98,12 +98,9 @@ namespace PowerPointPresentation
       try
       {
         MySqlCommand command = _MySqlConnection.CreateCommand();
-
-        presInfo.DbId = command.LastInsertedId;
-
         command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
           INSERT INTO `{5}` (`naz`, `title`, `size`, `slides`, `content`)
-           VALUES ('{0}', '{1}', '{2}', '{3}', '{4:0.00}')
+           VALUES ('{0}', '{1}', '{2:0.00}', '{3}', '{4}')
         ",
          SecurityElement.Escape(presInfo.Name),
          SecurityElement.Escape(presInfo.Title),

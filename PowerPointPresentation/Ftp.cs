@@ -12,8 +12,6 @@ namespace PowerPointPresentation
   /// </summary>
   public class FTP
   {
-    public const string AverageAndBigImageServerDir = "images";
-    public const string SmallImageServerDir = "img_main";
     public const string FilesServerDir = "files";
 
     private readonly string _FTPHost;
@@ -56,8 +54,8 @@ namespace PowerPointPresentation
         CreateFtpFolder(FilesServerDir);
       }
 
-      CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, SmallImageServerDir));
-      CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir));
+      //CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, SmallImageServerDir));
+      //CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir));
       #endregion
     }
 
@@ -74,23 +72,27 @@ namespace PowerPointPresentation
       {
         SlideInfo slideInfo = presInfo.SlidersInfo[index];
 
-        if (!String.IsNullOrEmpty(slideInfo.ImageNameServerSmall))
+        //if (!String.IsNullOrEmpty(slideInfo.ImageNameServerSmall))
+        //{
+        //  UploadImage(slideInfo.ImageNameClientSmall, String.Format("{0}/{1}", SmallImageServerDir, slideInfo.ImageNameServerSmall));
+        //}
+
+        CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString()));
+
+        if (!String.IsNullOrEmpty(slideInfo.ImageNameClientAverage))
         {
-          UploadImage(slideInfo.ImageNameClientSmall, String.Format("{0}/{1}", SmallImageServerDir, slideInfo.ImageNameServerSmall));
+          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString(), "268"));
+          UploadImage(
+            Path.Combine(SlideInfo.GetLocalImageDirectoryAbsolutePath(presInfo.DbId, "268"), slideInfo.ImageNameClientAverage),
+            String.Format("{0}/{1}/268/{2}", Path.Combine(_UploadImagesBaseDir, FilesServerDir), presInfo.DbId, slideInfo.ImageNameClientAverage));
         }
 
-        if (!String.IsNullOrEmpty(slideInfo.ImageNameServerAverage))
+        if (!String.IsNullOrEmpty(slideInfo.ImageNameClientBig))
         {
-          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir, presInfo.DbId.ToString()));
-          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir, presInfo.DbId.ToString(), "225"));
-          UploadImage(slideInfo.ImageNameClientAverage, String.Format("{0}/{1}/225/{2}", AverageAndBigImageServerDir, presInfo.DbId, slideInfo.ImageNameServerAverage));
-        }
-
-        if (!String.IsNullOrEmpty(slideInfo.ImageNameServerBig))
-        {
-          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir, presInfo.DbId.ToString()));
-          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir, presInfo.DbId.ToString(), "500"));
-          UploadImage(slideInfo.ImageNameClientBig, String.Format("{0}/{1}/500/{2}", AverageAndBigImageServerDir, presInfo.DbId, slideInfo.ImageNameServerBig));
+          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString(), "573"));
+          UploadImage(
+            Path.Combine(SlideInfo.GetLocalImageDirectoryAbsolutePath(presInfo.DbId, "573"), slideInfo.ImageNameClientBig),
+            String.Format("{0}/{1}/573/{2}", Path.Combine(_UploadImagesBaseDir, FilesServerDir), presInfo.DbId, slideInfo.ImageNameClientBig));
         }
 
         if (UploadImageCompleteCallback != null)
@@ -99,7 +101,11 @@ namespace PowerPointPresentation
 
       try
       {
-        FtpWebRequest request = (FtpWebRequest)WebRequest.Create(String.Format("ftp://{0}/{1}/{2}", _FTPHost, Path.Combine(_UploadImagesBaseDir, FilesServerDir), presInfo.ServerFileName));
+        FtpWebRequest request = (FtpWebRequest)WebRequest.Create(String.Format("ftp://{0}/{1}/{2}/{3}",
+                                                                               _FTPHost,
+                                                                               Path.Combine(_UploadImagesBaseDir, FilesServerDir),
+                                                                               presInfo.DbId,
+                                                                               Path.ChangeExtension("presentation.zip", Path.GetExtension(presInfo.ClientFilePath))));
 
         request.UseBinary = true;
         request.Method = WebRequestMethods.Ftp.UploadFile;

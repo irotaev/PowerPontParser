@@ -232,7 +232,7 @@ namespace PowerPointPresentation
 
         {
           string slideImageNameAverage = (i + 1).ToString() + ".jpg";
-          string slidePath = Path.Combine(Directory.GetCurrentDirectory(), PPTFiles._PresentationImageDir, String.Format("{0}\\268", _PresentationInfo.DbId));
+          string slidePath = SlideInfo.GetLocalImageDirectoryAbsolutePath(_PresentationInfo.DbId, "268");
 
           if (!Directory.Exists(slidePath))
             Directory.CreateDirectory(slidePath);
@@ -243,7 +243,7 @@ namespace PowerPointPresentation
 
         {
           string slideImageNameBig = (i + 1).ToString() + ".jpg";
-          string slidePath = Path.Combine(Directory.GetCurrentDirectory(), PPTFiles._PresentationImageDir, String.Format("{0}\\573", _PresentationInfo.DbId));
+          string slidePath = SlideInfo.GetLocalImageDirectoryAbsolutePath(_PresentationInfo.DbId, "573");
 
           if (!Directory.Exists(slidePath))
             Directory.CreateDirectory(slidePath);
@@ -412,6 +412,11 @@ namespace PowerPointPresentation
     }
 
     private readonly PresentationInfo _PresentationInfo;
+
+    public static string GetLocalImageDirectoryAbsolutePath(long dbId, string imageSize)
+    {
+      return Path.Combine(Directory.GetCurrentDirectory(), PPTFiles._PresentationImageDir, String.Format("{0}\\{1}", dbId, imageSize));
+    }
 
     /// <summary>
     /// Номер слайда

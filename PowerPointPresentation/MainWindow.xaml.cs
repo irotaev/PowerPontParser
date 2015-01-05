@@ -251,8 +251,7 @@ namespace PowerPointPresentation
             imageNames.Add(slideInfo.ImageNameClientBig);
         }
 
-        //TODO:RTV !!!!!!!
-        //ftp.UploadImages(presInfo);
+        ftp.UploadImages(presInfo);
       }
       catch (Exception ex)
       {
