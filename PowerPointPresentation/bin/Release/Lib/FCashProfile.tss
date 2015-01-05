@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <ExportDBInfo>
+    <DBRemoteHost>144.76.96.133</DBRemoteHost>
+    <DBName>lusana</DBName>
+    <DBUser>lusana</DBUser>
+    <DBPassword>zaraza</DBPassword>
+  </ExportDBInfo>
+
+  <ExportFtpInfo>
+    <Host>144.76.96.133</Host>
+    <UserName>zaraza</UserName>
+    <UserPassword>zaraza</UserPassword>
+    <ImagesDir>DEL</ImagesDir>
+  </ExportFtpInfo>
+</root>

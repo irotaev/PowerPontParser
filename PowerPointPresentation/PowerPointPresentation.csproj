@@ -90,6 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BaseTable.cs" />
     <Compile Include="Ftp.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -99,6 +100,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\LicenseVerifier.cs" />
+    <Compile Include="MySQLPresentationTable.cs" />
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -112,7 +114,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MySQLPresentationTable.cs" />
     <Compile Include="PPTFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -162,10 +163,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lib\SevenZipSharp.dll" />
-    <Content Include="Settings.xml">
+    <None Include="Lib\FCashProfile.tss">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Resource Include="Resource\settings.png" />
     <Resource Include="Resource\PowerPoint.ico" />
   </ItemGroup>

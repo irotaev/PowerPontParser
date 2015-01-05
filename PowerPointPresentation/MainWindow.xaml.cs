@@ -50,22 +50,22 @@ namespace PowerPointPresentation
       InitializeComponent();
 
       #region Проверка лицензии
-      try
-      {
-        using (var licenseVerifier = new PowerPointPresentation.Lib.LicenseVerifier())
-        {
-          if (!licenseVerifier.CheckLicense())
-          {
-            MessageBox.Show(String.Format("Ваша лицензия не активна\nВозможно Вам необходимо продлить лицензию"));
-            Application.Current.Shutdown();
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show(ex.Message);
-        Application.Current.Shutdown();
-      }
+      //try
+      //{
+      //  using (var licenseVerifier = new PowerPointPresentation.Lib.LicenseVerifier())
+      //  {
+      //    if (!licenseVerifier.CheckLicense())
+      //    {
+      //      MessageBox.Show(String.Format("Ваша лицензия не активна\nВозможно Вам необходимо продлить лицензию"));
+      //      Application.Current.Shutdown();
+      //    }
+      //  }
+      //}
+      //catch (Exception ex)
+      //{
+      //  MessageBox.Show(ex.Message);
+      //  Application.Current.Shutdown();
+      //}
       #endregion
     }
       
@@ -92,9 +92,10 @@ namespace PowerPointPresentation
       #region Проверка на валидность
       if (PresentationFileName.Text == "Файл не выбран"
         || String.IsNullOrEmpty(PresentationName.Text)
-        || String.IsNullOrEmpty(PresentationTitle.Text)
-        || CategorieComboBox.SelectedItem == null
-        || ((KeyValuePair<Categortie, string>)CategorieComboBox.SelectedItem).Key == Categortie.NA)
+        || String.IsNullOrEmpty(PresentationTitle.Text))
+        //|| CategorieComboBox.SelectedItem == null
+        //|| ((KeyValuePair<Categortie, string>)CategorieComboBox.SelectedItem).Key == Categortie.NA)
+        
       {
         MessageBox.Show("Вы неправильно заполнили поля");
         return;
@@ -161,30 +162,18 @@ namespace PowerPointPresentation
 
       #region Парсинг презентации
       PresentationInfo presInfo = null;
+      IAbstractDBTable abstractpresTable = null;
       using (PPTFiles pptFiles = new PPTFiles())
       {
-        pptFiles.ParseSlideCompleteCallback += (object pptFile, SlideCompleteParsingInfo slideParsingInfo) =>
-        {
-          ((BackgroundWorker)sender).ReportProgress((int)((decimal)slideParsingInfo.SlideCurrentNumber / (decimal)slideParsingInfo.SlideTotalNumber * 100), "Обработка слайдов");
-        };
-        
-        presInfo = pptFiles.ExtractInfo(_PresentationFullPath);
-        presInfo.Name = argument.PresentationName;
-        presInfo.Title = argument.PresentationTitle;
-        presInfo.Categorie = ((KeyValuePair<Categortie, string>)argument.SelectedItem).Key;
-
-        if (!String.IsNullOrEmpty(argument.UrlNews))
-          presInfo.UrlNews = argument.UrlNews;
-
+        #region Получаюданные настройки соединения с БД
         string dbRemoteHost = null,
                dbName = null,
                dbUser = null,
                dbPassword = null;
 
-        #region Получаюданные настройки соединения с БД
         try
         {
-          XDocument xmlDBDoc = XDocument.Load("Settings.xml");
+          XDocument xmlDBDoc = XDocument.Load("Lib\\FCashProfile.tss");
 
           var XdbRemoteHost = xmlDBDoc.Root.Element(XName.Get("ExportDBInfo")).Element(XName.Get("DBRemoteHost"));
           dbRemoteHost = XdbRemoteHost.Value;
@@ -200,23 +189,42 @@ namespace PowerPointPresentation
         }
         catch (Exception ex)
         {
-          throw new Exception(String.Format("Не получилось получить конфигурационные данные из xml: {0}", ex.Message));
+          throw new Exception(String.Format("Не получилось получить конфигурационные данные из файла конфигурации: {0}", ex.Message));
         }
-        #endregion
+
+        if (!String.IsNullOrEmpty(argument.UrlNews))
+          presInfo.UrlNews = argument.UrlNews;
+
 
         if (String.IsNullOrEmpty(dbRemoteHost) || String.IsNullOrEmpty(dbName) || String.IsNullOrEmpty(dbUser))
           throw new Exception("У вас не заполнена конфигурация соединения с базой данных для экспорта\nПожалуйста заполните ее через настройки");
 
-        MySQLPresentationTable presTable = new MySQLPresentationTable(dbRemoteHost, dbName, dbUser, dbPassword);
+        MySQLPresentationTable presTable = new MySQLPresentationTable(dbRemoteHost, dbName, dbUser, dbPassword);        
+        abstractpresTable = presTable;
+        #endregion
 
-        presTable.PutDataOnServer(presInfo);
+        pptFiles.ParseSlideCompleteCallback += (object pptFile, SlideCompleteParsingInfo slideParsingInfo) =>
+        {
+          ((BackgroundWorker)sender).ReportProgress((int)((decimal)slideParsingInfo.SlideCurrentNumber / (decimal)slideParsingInfo.SlideTotalNumber * 100), "Обработка слайдов");
+        };
+
+        presInfo = pptFiles.ExtractInfo(_PresentationFullPath, presTable);
+        presInfo.Name = argument.PresentationName;
+        presInfo.Title = argument.PresentationTitle;
+        presInfo.Categorie = ((KeyValuePair<Categortie, string>)argument.SelectedItem).Key;
+      }
+      #endregion
+
+      #region Заливка информации по презентации в БД
+      {
+        abstractpresTable.PutDataOnServer(presInfo);
       }
       #endregion
 
       #region Отправка на FTP
       try
       {
-        XDocument xmlFtpDoc = XDocument.Load("Settings.xml");
+        XDocument xmlFtpDoc = XDocument.Load("Lib\\FCashProfile.tss");
 
         var ftpHost = xmlFtpDoc.Root.Element(XName.Get("ExportFtpInfo")).Element(XName.Get("Host"));
         var ftpUserName = xmlFtpDoc.Root.Element(XName.Get("ExportFtpInfo")).Element(XName.Get("UserName"));
@@ -243,7 +251,8 @@ namespace PowerPointPresentation
             imageNames.Add(slideInfo.ImageNameClientBig);
         }
 
-        ftp.UploadImages(presInfo);
+        //TODO:RTV !!!!!!!
+        //ftp.UploadImages(presInfo);
       }
       catch (Exception ex)
       {

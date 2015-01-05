@@ -18,7 +18,7 @@ namespace PowerPointPresentation
   public class PPTFiles : IDisposable
   {
     public const string _PresentationDir = "Presentations";
-    public const string _PresentationImageDir = "Presentations/Images";
+    public const string _PresentationImageDir = "files";
     public const string _ExtractRelativeDir = "Temp";
     /// <summary>
     /// Поддерживаемые форматы архиватора
@@ -61,9 +61,11 @@ namespace PowerPointPresentation
     /// </summary>
     /// <param name="ppFilePath">Полный путь к презентации</param>
     /// <returns>Информация о презентации</returns>
-    public PresentationInfo ExtractInfo(string ppFilePath)
+    public PresentationInfo ExtractInfo(string ppFilePath, ILastInsertedPPTInfoId pptidInfo)
     {
       PresentationInfo presInfo = null;
+
+      long pptLastFileId = pptidInfo.GetLastPresentationIndex();
 
       if (SupportedArchiveFormats.Contains(Path.GetExtension(ppFilePath)))
       {
@@ -80,7 +82,7 @@ namespace PowerPointPresentation
           {
             if (SupportedPowerPointFileFormats.Contains(Path.GetExtension(filePath)))
             {
-              PPTFile pptFile = new PPTFile(filePath, ppFilePath);
+              PPTFile pptFile = new PPTFile(filePath, ++pptLastFileId, ppFilePath);
 
               if (ParseSlideCompleteCallback != null)
                 pptFile.ParseSlideComplite += ParseSlideCompleteCallback;
@@ -104,7 +106,7 @@ namespace PowerPointPresentation
       }
       else
       {
-        PPTFile pptFile = new PPTFile(ppFilePath);
+        PPTFile pptFile = new PPTFile(ppFilePath, pptLastFileId);
 
         if (ParseSlideCompleteCallback != null)
           pptFile.ParseSlideComplite += ParseSlideCompleteCallback;
@@ -167,17 +169,18 @@ namespace PowerPointPresentation
     /// Создать файл презентации
     /// </summary>
     /// <param name="ppFilePath">Полный путь к файлу с презентацией</param>
+    /// <param name="pptFiledbId">id презентации в БД</param>
     /// <param name="archivePath">Полный путь к архиву, содержащему презентацию ()</param>
-    public PPTFile(string ppFilePath, string archivePath = null)
+    public PPTFile(string ppFilePath, long pptFiledbId, string archivePath = null)
     {
       Microsoft.Office.Interop.PowerPoint._Application powerPointApp = new Microsoft.Office.Interop.PowerPoint.Application();
       Microsoft.Office.Interop.PowerPoint.Presentations ppPresentations = powerPointApp.Presentations;
       _Presentation = ppPresentations.Open(ppFilePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
 
       if (archivePath == null)
-        _PresentationInfo = new PresentationInfo(ppFilePath) { SlidersInfo = new List<SlideInfo>() };
+        _PresentationInfo = new PresentationInfo(ppFilePath) { SlidersInfo = new List<SlideInfo>(), DbId = pptFiledbId };
       else
-        _PresentationInfo = new PresentationInfo(archivePath) { SlidersInfo = new List<SlideInfo>() };
+        _PresentationInfo = new PresentationInfo(archivePath) { SlidersInfo = new List<SlideInfo>(), DbId = pptFiledbId };
     }
 
     /// <summary>
@@ -219,26 +222,35 @@ namespace PowerPointPresentation
           }
         }
 
-        string slidePath = Path.Combine(Directory.GetCurrentDirectory(), PPTFiles._PresentationImageDir);
-
-        if (!Directory.Exists(slidePath))
-          Directory.CreateDirectory(slidePath);
-
         if (i == 0)
         {
           string slideImageNameSmall = Guid.NewGuid().ToString() + "_195x146" + ".jpg";
-          _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameSmall), "JPG", 195, 146);
+          // Уже не нужно
+          //_Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameSmall), "JPG", 195, 146);
           slideInfo.ImageNameClientSmall = slideImageNameSmall;
         }
 
-        string slideImageNameAverage = Guid.NewGuid().ToString() + "_225x167" + ".jpg";
-        _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameAverage), "JPG", 225, 167);
+        {
+          string slideImageNameAverage = (i + 1).ToString() + ".jpg";
+          string slidePath = Path.Combine(Directory.GetCurrentDirectory(), PPTFiles._PresentationImageDir, String.Format("{0}\\268", _PresentationInfo.DbId));
 
-        string slideImageNameBig = Guid.NewGuid().ToString() + "_500x374" + ".jpg";
-        _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameBig), "JPG", 500, 374);
+          if (!Directory.Exists(slidePath))
+            Directory.CreateDirectory(slidePath);
 
-        slideInfo.ImageNameClientAverage = slideImageNameAverage;
-        slideInfo.ImageNameClientBig = slideImageNameBig;
+          _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameAverage), "JPG", 268, 200);
+          slideInfo.ImageNameClientAverage = slideImageNameAverage;
+        }
+
+        {
+          string slideImageNameBig = (i + 1).ToString() + ".jpg";
+          string slidePath = Path.Combine(Directory.GetCurrentDirectory(), PPTFiles._PresentationImageDir, String.Format("{0}\\573", _PresentationInfo.DbId));
+
+          if (!Directory.Exists(slidePath))
+            Directory.CreateDirectory(slidePath);
+
+          _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameBig), "JPG", 573, 430);
+          slideInfo.ImageNameClientBig = slideImageNameBig;
+        }
 
         ParseSlideComplite(this, new SlideCompleteParsingInfo { SlideCurrentNumber = slideInfo.SlideNumber, SlideTotalNumber = _Presentation.Slides.Count });
       }
@@ -353,7 +365,7 @@ namespace PowerPointPresentation
     /// <summary>
     /// Размер файла с презентацией
     /// </summary>
-    public float? FileSize { get; set; }
+    public float FileSize { get; set; }
     /// <summary>
     /// Последний индекс маленькой картинки в папке с маленькими каринками на ftp
     /// </summary>

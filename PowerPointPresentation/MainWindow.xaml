@@ -66,7 +66,8 @@
         <TextBox Name="PresentationTitle" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
       </GroupBox>
 
-      <GroupBox Grid.Row="3">
+      <!---Можно выпилить. Из старой версии-->
+      <GroupBox Grid.Row="3" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Url news (Необязательное)</Label>
         </GroupBox.Header>
@@ -74,7 +75,8 @@
         <TextBox Name="UrlNews" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
       </GroupBox>
 
-      <GroupBox Grid.Row="4">
+      <!---Можно выпилить. Из старой версии-->
+      <GroupBox Grid.Row="4" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Категория презентации</Label>
         </GroupBox.Header>
@@ -85,9 +87,11 @@
 
       <DockPanel Grid.Row="5" Margin="5" LastChildFill="True">
 
-        <Button Height="30" Margin="10 0 0 0" Width="30" DockPanel.Dock="Right" Click="Button_Click">
+        <!---Можно выпилить. Из старой версии-->
+        <Button Height="30" Margin="10 0 0 0" Width="30" DockPanel.Dock="Right" Click="Button_Click" Visibility="Collapsed">
           <Image Source="/Resource/settings.png" />
         </Button>
+        
         <Button Content="Распарсить презентацию" Click="Button_Click_2" Height="30" HorizontalAlignment="Stretch" />
       </DockPanel>
     </Grid>
