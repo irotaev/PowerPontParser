@@ -66,7 +66,15 @@
         <TextBox Name="PresentationTitle" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
       </GroupBox>
 
-      <!---Можно выпилить. Из старой версии-->
+    <GroupBox Grid.Row="3">
+        <GroupBox.Header>
+                    <Label>Login</Label>
+        </GroupBox.Header>
+
+        <TextBox Name="Login" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
+    </GroupBox>
+
+            <!---Можно выпилить. Из старой версии-->
       <GroupBox Grid.Row="3" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Url news (Необязательное)</Label>

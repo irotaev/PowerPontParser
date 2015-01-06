@@ -351,6 +351,10 @@ namespace PowerPointPresentation
     /// </summary>
     public string Title { get; set; }
     /// <summary>
+    /// Свободное поле, заполняется пользователем
+    /// </summary>
+    public string Login { get; set; }
+    /// <summary>
     /// Категория презентации
     /// </summary>
     public Categortie Categorie { get; set; }

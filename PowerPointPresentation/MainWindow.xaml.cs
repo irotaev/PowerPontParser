@@ -103,11 +103,14 @@ namespace PowerPointPresentation
       if (PresentationFileName.Text == "Файл не выбран"
         || String.IsNullOrEmpty(PresentationName.Text)
         || String.IsNullOrEmpty(PresentationTitle.Text))
-        //|| CategorieComboBox.SelectedItem == null
-        //|| ((KeyValuePair<Categortie, string>)CategorieComboBox.SelectedItem).Key == Categortie.NA)
-        
       {
         MessageBox.Show("Вы неправильно заполнили поля");
+        return;
+      }
+
+      if (!String.IsNullOrWhiteSpace(Login.Text) && Login.Text.Length > 100)
+      {
+        MessageBox.Show("Поле \"Login\" должно содержать не больше 100 символов");
         return;
       }
       #endregion
@@ -126,7 +129,8 @@ namespace PowerPointPresentation
         PresentationName = PresentationName.Text,
         PresentationTitle = PresentationTitle.Text,
         SelectedItem = CategorieComboBox.SelectedItem,
-        UrlNews = UrlNews.Text
+        UrlNews = UrlNews.Text,
+        Login = Login.Text
       };
 
       worker.RunWorkerAsync(workerArgument);
@@ -221,6 +225,7 @@ namespace PowerPointPresentation
         presInfo = pptFiles.ExtractInfo(_PresentationFullPath, presTable);
         presInfo.Name = argument.PresentationName;
         presInfo.Title = argument.PresentationTitle;
+        presInfo.Login = argument.Login;
         presInfo.Categorie = ((KeyValuePair<Categortie, string>)argument.SelectedItem).Key;
       }
       #endregion
@@ -276,6 +281,7 @@ namespace PowerPointPresentation
       public string PresentationTitle { get; set; }
       public object SelectedItem { get; set; }
       public string UrlNews { get; set; }
+      public string Login { get; set; }
     }
 
     private void Button_Click(object sender, RoutedEventArgs e)

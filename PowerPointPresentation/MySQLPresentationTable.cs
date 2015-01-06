@@ -61,7 +61,7 @@ namespace PowerPointPresentation
                                     "</div><!-- all-sl-img -->" +
 
                                     "<div class='all-sl-txt'>{3}</div><!-- all-sl-txt -->" +
-                                 "</div><!-- slide-block -->", 
+                                 "</div><!-- slide-block -->",
                                  (index + 1), presInfo.DbId, presInfo.SlidersInfo[index].ImageNameServerAverage, presInfo.SlidersInfo[index].Text);
       }
 
@@ -70,7 +70,7 @@ namespace PowerPointPresentation
 
     public override void PutDataOnServer(PresentationInfo presInfo)
     {
-      #region Создание таблицы main, если это необходимо
+      #region Создание таблицы, если это необходимо
       try
       {
         {
@@ -82,7 +82,8 @@ namespace PowerPointPresentation
                               `title` VARCHAR(255) NULL,
                               `size` FLOAT NOT NULL,
                               `slides` SMALLINT NOT NULL,
-                              `content` TEXT(1000) NOT NULL,                              
+                              `content` TEXT(1000) NOT NULL,  
+                              `login` VARCHAR(100) NULL,                            
                               UNIQUE KEY (id)
                               ) CHARSET={1}", SecurityElement.Escape(_TableName), TABLE_CHARSET);
           command.ExecuteNonQuery();
@@ -99,14 +100,15 @@ namespace PowerPointPresentation
       {
         MySqlCommand command = _MySqlConnection.CreateCommand();
         command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
-          INSERT INTO `{5}` (`naz`, `title`, `size`, `slides`, `content`)
-           VALUES ('{0}', '{1}', '{2:0.00}', '{3}', '{4}')
+          INSERT INTO `{6}` (`naz`, `title`, `size`, `slides`, `content`, `login`)
+           VALUES ('{0}', '{1}', '{2:0.00}', '{3}', '{4}', '{5}')
         ",
          SecurityElement.Escape(presInfo.Name),
          SecurityElement.Escape(presInfo.Title),
          Convert.ToSingle(presInfo.FileSize / 1024 / 1024, System.Globalization.CultureInfo.InvariantCulture),
          SecurityElement.Escape(presInfo.SlidersInfo.Count.ToString()),
          SecurityElement.Escape(FormContentDbColumn(presInfo)),
+         SecurityElement.Escape(presInfo.Login),
          SecurityElement.Escape(_TableName));
 
         command.ExecuteNonQuery();
