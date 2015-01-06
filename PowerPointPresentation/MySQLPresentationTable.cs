@@ -62,7 +62,7 @@ namespace PowerPointPresentation
 
                                     "<div class='all-sl-txt'>{3}</div><!-- all-sl-txt -->" +
                                  "</div><!-- slide-block -->",
-                                 (index + 1), presInfo.DbId, presInfo.SlidersInfo[index].ImageNameServerAverage, presInfo.SlidersInfo[index].Text);
+                                 (index + 1), presInfo.DbId, presInfo.SlidersInfo[index].ImageNameClientAverage, presInfo.SlidersInfo[index].Text);
       }
 
       return result;

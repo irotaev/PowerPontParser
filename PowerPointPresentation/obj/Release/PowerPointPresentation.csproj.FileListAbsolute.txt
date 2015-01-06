@@ -51,11 +51,10 @@ F:\Projects\PowerPointPresentation\PowerPointPresentation\obj\Release\PowerPoint
 F:\Projects\PowerPointPresentation\PowerPointPresentation\obj\Release\PowerPointPresentation.exe
 F:\Projects\PowerPointPresentation\PowerPointPresentation\obj\Release\PowerPointPresentation.pdb
 F:\Projects\PowerPointPresentation\PowerPointPresentation\obj\Release\PowerPointPresentation.csprojResolveAssemblyReference.cache
-P:\DELETE\PPP\PowerPointPresentation\bin\Release\PowerPointPresentation.exe.config
-P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.csproj.ResolveComReference.cache
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\Lib\7z.dll
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\Lib\7z64.dll
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\Lib\FCashProfile.tss
+P:\DELETE\PPP\PowerPointPresentation\bin\Release\PowerPointPresentation.exe.config
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\PowerPointPresentation.exe
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\PowerPointPresentation.pdb
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\MahApps.Metro.dll
@@ -64,7 +63,7 @@ P:\DELETE\PPP\PowerPointPresentation\bin\Release\SevenZipSharp.dll
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\System.Windows.Interactivity.dll
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\UnidecodeSharp.dll
 P:\DELETE\PPP\PowerPointPresentation\bin\Release\MahApps.Metro.xml
-P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.csprojResolveAssemblyReference.cache
+P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.csproj.ResolveComReference.cache
 P:\DELETE\PPP\PowerPointPresentation\obj\Release\MainWindow.baml
 P:\DELETE\PPP\PowerPointPresentation\obj\Release\Views\Settings.baml
 P:\DELETE\PPP\PowerPointPresentation\obj\Release\App.baml
@@ -78,3 +77,4 @@ P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.Properti
 P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.csproj.GenerateResource.Cache
 P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.exe
 P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.pdb
+P:\DELETE\PPP\PowerPointPresentation\obj\Release\PowerPointPresentation.csprojResolveAssemblyReference.cache
