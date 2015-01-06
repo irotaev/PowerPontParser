@@ -16,7 +16,7 @@
     </Storyboard>
   </Controls:MetroWindow.Resources>
 
-  <Grid>
+  <Grid Name="GridWrapper">
     <TextBlock Name="MessagePopUp" Text="" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Padding="5" FontSize="16" LineHeight="30"
                Background="Green" Panel.ZIndex="100" Height="30" Foreground="White" Opacity="0"/>
 

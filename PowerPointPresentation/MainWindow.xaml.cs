@@ -23,7 +23,7 @@ namespace PowerPointPresentation
 {
   public partial class MainWindow : MetroWindow
   {
-    
+
     private Dictionary<Categortie, string> _Categories = new Dictionary<Categortie, string>();
     public Dictionary<Categortie, string> Categories { get { return _Categories; } }
 
@@ -52,24 +52,24 @@ namespace PowerPointPresentation
       #region Проверка лицензии
       try
       {
-          //using (var licenseVerifier = new PowerPointPresentation.Lib.LicenseVerifier())
-          //{
-          //    if (!licenseVerifier.CheckLicense())
-          //    {
-          //        MessageBox.Show(String.Format("Ваша лицензия не активна\nВозможно Вам необходимо продлить лицензию"));
-          //        Application.Current.Shutdown();
-          //    }
-          //}
+        //using (var licenseVerifier = new PowerPointPresentation.Lib.LicenseVerifier())
+        //{
+        //    if (!licenseVerifier.CheckLicense())
+        //    {
+        //        MessageBox.Show(String.Format("Ваша лицензия не активна\nВозможно Вам необходимо продлить лицензию"));
+        //        Application.Current.Shutdown();
+        //    }
+        //}
 
-          InternetTime.SNTPClient sntp = new InternetTime.SNTPClient("ntp1.ja.net");
-          sntp.Connect(false); // true to update local client clock
-          DateTime dt = sntp.DestinationTimestamp.AddMilliseconds(sntp.LocalClockOffset);
+        InternetTime.SNTPClient sntp = new InternetTime.SNTPClient("ntp1.ja.net");
+        sntp.Connect(false); // true to update local client clock
+        DateTime dt = sntp.DestinationTimestamp.AddMilliseconds(sntp.LocalClockOffset);
 
-          if (dt > DateTime.ParseExact("01/09/2015", "d", System.Globalization.CultureInfo.InvariantCulture))
-          {
-            MessageBox.Show("Срок лицензии истек");
-            Application.Current.Shutdown();
-          }
+        if (dt > DateTime.ParseExact("01/09/2015", "d", System.Globalization.CultureInfo.InvariantCulture))
+        {
+          MessageBox.Show("Срок лицензии истек");
+          Application.Current.Shutdown();
+        }
       }
       catch
       {
@@ -78,7 +78,7 @@ namespace PowerPointPresentation
       }
       #endregion
     }
-      
+
     private void Button_Click_1(object sender, RoutedEventArgs e)
     {
       Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -116,8 +116,8 @@ namespace PowerPointPresentation
       #endregion
 
       MainGrid.Opacity = 0.2;
-      AppWindow.IsEnabled = false;
-      
+      GridWrapper.IsEnabled = false;
+
       BackgroundWorker worker = new BackgroundWorker();
       worker.DoWork += worker_DoWork;
       worker.RunWorkerCompleted += worker_RunWorkerCompleted;
@@ -140,7 +140,7 @@ namespace PowerPointPresentation
     {
       if (ProgressInfo.Visibility != System.Windows.Visibility.Visible)
         ProgressInfo.Visibility = System.Windows.Visibility.Visible;
-      
+
       if (ProgressBar.Visibility != System.Windows.Visibility.Visible)
         ProgressBar.Visibility = System.Windows.Visibility.Visible;
 
@@ -154,7 +154,7 @@ namespace PowerPointPresentation
       MainGrid.Opacity = 1;
       ProgressInfo.Visibility = System.Windows.Visibility.Collapsed;
       ProgressBar.Visibility = System.Windows.Visibility.Collapsed;
-      AppWindow.IsEnabled = true;
+      GridWrapper.IsEnabled = true;
 
       if (e.Error != null)
       {
@@ -213,7 +213,7 @@ namespace PowerPointPresentation
         if (String.IsNullOrEmpty(dbRemoteHost) || String.IsNullOrEmpty(dbName) || String.IsNullOrEmpty(dbUser))
           throw new Exception("У вас не заполнена конфигурация соединения с базой данных для экспорта\nПожалуйста заполните ее через настройки");
 
-        MySQLPresentationTable presTable = new MySQLPresentationTable(dbRemoteHost, dbName, dbUser, dbPassword);        
+        MySQLPresentationTable presTable = new MySQLPresentationTable(dbRemoteHost, dbName, dbUser, dbPassword);
         abstractpresTable = presTable;
         #endregion
 
@@ -250,6 +250,11 @@ namespace PowerPointPresentation
         ftp.UploadImageCompleteCallback += (object ftpSender, UploadImageCompliteInfo completeInfo) =>
           {
             ((BackgroundWorker)sender).ReportProgress((int)((decimal)completeInfo.CurrentImageNumber / (decimal)completeInfo.TotalImagesCount * 100), "Загрузка изображений на FTP");
+          };
+
+        ftp.OnUploadPresentationBlockCallbak += (object ftpSender, UploadPresentationBlockInfo blockInfo) =>
+          {
+            ((BackgroundWorker)sender).ReportProgress(blockInfo.PercentProgress, "Загрузка презентации");
           };
 
         List<string> imageNames = new List<string>();

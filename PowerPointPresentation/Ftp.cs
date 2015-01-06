@@ -25,6 +25,10 @@ namespace PowerPointPresentation
     /// Коллбэк на завершение загрузки картинки по FTP
     /// </summary>
     public event EventHandler<UploadImageCompliteInfo> UploadImageCompleteCallback;
+    /// <summary>
+    /// Событие загрузки блока презентации
+    /// </summary>
+    public event EventHandler<UploadPresentationBlockInfo> OnUploadPresentationBlockCallbak;
 
     /// <summary>
     /// 
@@ -121,8 +125,23 @@ namespace PowerPointPresentation
 
         Stream requestStream = request.GetRequestStream();
 
-        byte[] fileData = File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), presInfo.ClientFilePath));
-        requestStream.Write(fileData, 0, fileData.Length);
+        //byte[] fileData = File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), presInfo.ClientFilePath));
+        FileStream sourse = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), presInfo.ClientFilePath), FileMode.Open);
+
+        int count = 0;
+        int lenght = 0;
+        byte[] buffer = new byte[4096];
+        while ((count = sourse.Read(buffer, 0, 4096)) != 0)
+        {
+          lenght += count;
+
+          if (OnUploadPresentationBlockCallbak != null)
+            OnUploadPresentationBlockCallbak(this, new UploadPresentationBlockInfo { PercentProgress = (int)(lenght * 100 / sourse.Length) });
+
+          requestStream.Write(buffer, 0, count);
+        }
+
+        //requestStream.Write(fileData, 0, fileData.Length);
 
         requestStream.Close();
       }
@@ -205,5 +224,10 @@ namespace PowerPointPresentation
     /// Общее количество картинок
     /// </summary>
     public int TotalImagesCount { get; set; }
+  }
+
+  public class UploadPresentationBlockInfo : EventArgs
+  {
+    public int PercentProgress { get; set; }
   }
 }
