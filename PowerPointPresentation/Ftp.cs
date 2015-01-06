@@ -47,7 +47,7 @@ namespace PowerPointPresentation
       if (!String.IsNullOrEmpty(_UploadImagesBaseDir))
       {
         CreateFtpFolder(_UploadImagesBaseDir);
-        CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir));
+        CreateFtpFolder(GetUploadImagesServerFullDirectory());
       }
       else
       {
@@ -57,6 +57,14 @@ namespace PowerPointPresentation
       //CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, SmallImageServerDir));
       //CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, AverageAndBigImageServerDir));
       #endregion
+    }
+
+    private string GetUploadImagesServerFullDirectory()
+    {
+      if (String.IsNullOrWhiteSpace(_UploadImagesBaseDir))
+        return FilesServerDir;
+      else
+        return _UploadImagesBaseDir + "/" + FilesServerDir;
     }
 
     /// <summary>
@@ -84,7 +92,7 @@ namespace PowerPointPresentation
           CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString(), "268"));
           UploadImage(
             Path.Combine(SlideInfo.GetLocalImageDirectoryAbsolutePath(presInfo.DbId, "268"), slideInfo.ImageNameClientAverage),
-            String.Format("{0}/{1}/268/{2}", Path.Combine(_UploadImagesBaseDir, FilesServerDir), presInfo.DbId, slideInfo.ImageNameClientAverage));
+            String.Format("{0}/{1}/268/{2}", FilesServerDir, presInfo.DbId, slideInfo.ImageNameClientAverage));
         }
 
         if (!String.IsNullOrEmpty(slideInfo.ImageNameClientBig))
@@ -92,7 +100,7 @@ namespace PowerPointPresentation
           CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString(), "573"));
           UploadImage(
             Path.Combine(SlideInfo.GetLocalImageDirectoryAbsolutePath(presInfo.DbId, "573"), slideInfo.ImageNameClientBig),
-            String.Format("{0}/{1}/573/{2}", Path.Combine(_UploadImagesBaseDir, FilesServerDir), presInfo.DbId, slideInfo.ImageNameClientBig));
+            String.Format("{0}/{1}/573/{2}", FilesServerDir, presInfo.DbId, slideInfo.ImageNameClientBig));
         }
 
         if (UploadImageCompleteCallback != null)
