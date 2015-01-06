@@ -92,6 +92,7 @@
     </ApplicationDefinition>
     <Compile Include="BaseTable.cs" />
     <Compile Include="Ftp.cs" />
+    <Compile Include="InternetTime.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

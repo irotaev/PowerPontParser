@@ -50,22 +50,32 @@ namespace PowerPointPresentation
       InitializeComponent();
 
       #region Проверка лицензии
-      //try
-      //{
-      //  using (var licenseVerifier = new PowerPointPresentation.Lib.LicenseVerifier())
-      //  {
-      //    if (!licenseVerifier.CheckLicense())
-      //    {
-      //      MessageBox.Show(String.Format("Ваша лицензия не активна\nВозможно Вам необходимо продлить лицензию"));
-      //      Application.Current.Shutdown();
-      //    }
-      //  }
-      //}
-      //catch (Exception ex)
-      //{
-      //  MessageBox.Show(ex.Message);
-      //  Application.Current.Shutdown();
-      //}
+      try
+      {
+          //using (var licenseVerifier = new PowerPointPresentation.Lib.LicenseVerifier())
+          //{
+          //    if (!licenseVerifier.CheckLicense())
+          //    {
+          //        MessageBox.Show(String.Format("Ваша лицензия не активна\nВозможно Вам необходимо продлить лицензию"));
+          //        Application.Current.Shutdown();
+          //    }
+          //}
+
+          InternetTime.SNTPClient sntp = new InternetTime.SNTPClient("ntp1.ja.net");
+          sntp.Connect(false); // true to update local client clock
+          DateTime dt = sntp.DestinationTimestamp.AddMilliseconds(sntp.LocalClockOffset);
+
+          if (dt > DateTime.ParseExact("01/09/2015", "d", System.Globalization.CultureInfo.InvariantCulture))
+          {
+            MessageBox.Show("Срок лицензии истек");
+            Application.Current.Shutdown();
+          }
+      }
+      catch
+      {
+        MessageBox.Show("Во время обращения к серверу проверки лицензии произошла ошибка");
+        Application.Current.Shutdown();
+      }
       #endregion
     }
       
