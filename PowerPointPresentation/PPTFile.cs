@@ -106,7 +106,7 @@ namespace PowerPointPresentation
       }
       else
       {
-        PPTFile pptFile = new PPTFile(ppFilePath, pptLastFileId);
+        PPTFile pptFile = new PPTFile(ppFilePath, ++pptLastFileId);
 
         if (ParseSlideCompleteCallback != null)
           pptFile.ParseSlideComplite += ParseSlideCompleteCallback;
