@@ -117,7 +117,7 @@ namespace PowerPointPresentation
                                                                                _FTPHost,
                                                                                Path.Combine(_UploadImagesBaseDir, FilesServerDir),
                                                                                presInfo.DbId,
-                                                                               Path.ChangeExtension("presentation.zip", Path.GetExtension(presInfo.ClientFilePath))));
+                                                                               "presentation.zip"));
 
         request.UseBinary = true;
         request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -125,25 +125,26 @@ namespace PowerPointPresentation
 
         Stream requestStream = request.GetRequestStream();
 
-        //byte[] fileData = File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), presInfo.ClientFilePath));
-        FileStream sourse = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), presInfo.ClientFilePath), FileMode.Open);
-
-        int count = 0;
-        int lenght = 0;
-        byte[] buffer = new byte[4096];
-        while ((count = sourse.Read(buffer, 0, 4096)) != 0)
+        using (FileStream sourse = new FileStream(presInfo.ZipPresentationAbsoluteLocation, FileMode.Open))
         {
-          lenght += count;
 
-          if (OnUploadPresentationBlockCallbak != null)
-            OnUploadPresentationBlockCallbak(this, new UploadPresentationBlockInfo { PercentProgress = (int)(lenght * 100 / sourse.Length) });
+          int count = 0;
+          int lenght = 0;
+          byte[] buffer = new byte[4096];
+          while ((count = sourse.Read(buffer, 0, 4096)) != 0)
+          {
+            lenght += count;
 
-          requestStream.Write(buffer, 0, count);
+            if (OnUploadPresentationBlockCallbak != null)
+              OnUploadPresentationBlockCallbak(this, new UploadPresentationBlockInfo { PercentProgress = (int)(lenght * 100 / sourse.Length) });
+
+            requestStream.Write(buffer, 0, count);
+          }
+
+          requestStream.Close();
         }
 
-        //requestStream.Write(fileData, 0, fileData.Length);
-
-        requestStream.Close();
+        File.Delete(presInfo.ZipPresentationAbsoluteLocation);
       }
       catch (Exception ex)
       {

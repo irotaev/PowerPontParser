@@ -20,6 +20,7 @@ namespace PowerPointPresentation
     public const string _PresentationDir = "Presentations";
     public const string _PresentationImageDir = "files";
     public const string _ExtractRelativeDir = "Temp";
+    public const string COMPRESS_TEMP_RELATIVE_DIR = "Compressed_Temp";
     /// <summary>
     /// Поддерживаемые форматы архиватора
     /// </summary>
@@ -103,6 +104,8 @@ namespace PowerPointPresentation
           throw new Exception(String.Format("Файл презентации в архиве не найден\nАрхив был распакован в папку: {0}\nПри следующем запуске программы архив будет удален из временного хранилища",
             _ExtractDir));
         }
+
+        ZipFileOrDirectory(_ExtractDir, presInfo);
       }
       else
       {
@@ -115,6 +118,8 @@ namespace PowerPointPresentation
 
         FileInfo fileInfo = new FileInfo(ppFilePath);
         presInfo.FileSize = fileInfo.Length;
+
+        ZipFileOrDirectory(ppFilePath, presInfo);
       }
 
       return presInfo;
@@ -125,6 +130,36 @@ namespace PowerPointPresentation
       using (SevenZipExtractor extractor = new SevenZipExtractor(archivePath))
       {
         extractor.ExtractArchive(Path.Combine(_ExtractDir));
+      }
+    }
+
+    private void ZipFileOrDirectory(string path, PresentationInfo presInfo)
+    {
+      string tempCompressPath = Path.Combine(Directory.GetCurrentDirectory(), _PresentationDir, COMPRESS_TEMP_RELATIVE_DIR);
+
+      try
+      {
+        if (!Directory.Exists(tempCompressPath))
+          Directory.CreateDirectory(tempCompressPath);
+
+        if (Path.HasExtension(path))
+          File.Copy(path, Path.Combine(tempCompressPath, Path.GetFileName(path)));
+        else
+          Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(path, tempCompressPath);
+
+        string compressedPresentationAbsoluteLocation = Path.Combine(Directory.GetCurrentDirectory(), _PresentationDir, "presentation.zip");
+
+        new ICSharpCode.SharpZipLib.Zip.FastZip().CreateZip(compressedPresentationAbsoluteLocation, tempCompressPath, true, null, null);
+
+        presInfo.ZipPresentationAbsoluteLocation = compressedPresentationAbsoluteLocation;
+      }
+      catch (Exception ex)
+      {
+        throw new ApplicationException(String.Format("Во время создания архива с презентацией произошла ошибка: {0}", ex.Message));
+      }
+      finally
+      {
+        Directory.Delete(tempCompressPath, true);
       }
     }
 
@@ -400,6 +435,7 @@ namespace PowerPointPresentation
     /// Путь к файлу на стороне клиента, откуда взята презентация
     /// </summary>
     public string ClientFilePath { get { return _ClientFilePath; } }
+    public string ZipPresentationAbsoluteLocation { get; set; }
   }
 
   /// <summary>
