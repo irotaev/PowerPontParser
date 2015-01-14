@@ -66,7 +66,7 @@ namespace PowerPointPresentation
     {
       PresentationInfo presInfo = null;
 
-      long pptLastFileId = pptidInfo.GetLastPresentationIndex();
+      long pptCurrentFileId = pptidInfo.GetCurrentPresentationIndex();
 
       if (SupportedArchiveFormats.Contains(Path.GetExtension(ppFilePath)))
       {
@@ -83,7 +83,7 @@ namespace PowerPointPresentation
           {
             if (SupportedPowerPointFileFormats.Contains(Path.GetExtension(filePath)))
             {
-              PPTFile pptFile = new PPTFile(filePath, ++pptLastFileId, ppFilePath);
+              PPTFile pptFile = new PPTFile(filePath, pptCurrentFileId, ppFilePath);
 
               if (ParseSlideCompleteCallback != null)
                 pptFile.ParseSlideComplite += ParseSlideCompleteCallback;
@@ -109,7 +109,7 @@ namespace PowerPointPresentation
       }
       else
       {
-        PPTFile pptFile = new PPTFile(ppFilePath, ++pptLastFileId);
+        PPTFile pptFile = new PPTFile(ppFilePath, pptCurrentFileId);
 
         if (ParseSlideCompleteCallback != null)
           pptFile.ParseSlideComplite += ParseSlideCompleteCallback;

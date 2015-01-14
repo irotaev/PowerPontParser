@@ -127,7 +127,6 @@ namespace PowerPointPresentation
 
         using (FileStream sourse = new FileStream(presInfo.ZipPresentationAbsoluteLocation, FileMode.Open))
         {
-
           int count = 0;
           int lenght = 0;
           byte[] buffer = new byte[4096];

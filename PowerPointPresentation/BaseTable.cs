@@ -21,7 +21,7 @@ namespace PowerPointPresentation
     /// Получить id последней строки с информацией о презентации в базе
     /// </summary>
     /// <returns>id строки</returns>
-    long GetLastPresentationIndex();
+    long GetCurrentPresentationIndex();
   }
 
   public abstract class AbstractDBTable : IDisposable, IAbstractDBTable, ILastInsertedPPTInfoId
@@ -62,7 +62,7 @@ namespace PowerPointPresentation
 
     public abstract void PutDataOnServer(PresentationInfo presInfo);
 
-    public abstract long GetLastPresentationIndex();
+    public abstract long GetCurrentPresentationIndex();
     #endregion
   }
 }

@@ -19,12 +19,13 @@ namespace PowerPointPresentation
     public MySQLPresentationTable(string hostName, string dbName, string userName, string userPassword) : base(hostName, dbName, userName, userPassword, "present") { }
 
     #region Methods
-    public override long GetLastPresentationIndex()
+    public override long GetCurrentPresentationIndex()
     {
       long id = 0;
 
       MySqlCommand command = _MySqlConnection.CreateCommand();
-      command.CommandText = String.Format("SELECT id FROM `{0}` ORDER BY `id` DESC", _TableName);
+      command.CommandText = String.Format("SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = '{0}'", _TableName);
+      //command.CommandText = String.Format("SELECT id FROM `{0}` ORDER BY `id` DESC", _TableName);
 
       try
       {
@@ -34,7 +35,7 @@ namespace PowerPointPresentation
           {
             while (reader.Read() && id == 0)
             {
-              id = Int64.Parse(reader["id"].ToString());
+              id = Int64.Parse(reader["auto_increment"].ToString());
             }
           }
         }
