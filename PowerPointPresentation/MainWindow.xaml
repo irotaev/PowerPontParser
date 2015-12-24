@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="Парсинг презентации" 
-        Width="320" 
+        Width="600" 
         SizeToContent="Height"
         ResizeMode="NoResize"
         Icon="/Resource/PowerPoint.ico"
         Name="AppWindow" Style="{StaticResource ResourceKey=FlatWindow}">
-  
+
   <Controls:MetroWindow.Resources>
     <Storyboard x:Key="StoryboardMessagePopUp">
       <DoubleAnimation Storyboard.TargetName="MessagePopUp" Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0:1" BeginTime="0:0:0" />
@@ -26,15 +26,12 @@
 
     <Grid Margin="3" Name="MainGrid">
       <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
+        <RowDefinition Height="600"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <GroupBox Grid.Row="0">
+      <GroupBox Grid.Row="0" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Файл с презентацией</Label>
         </GroupBox.Header>
@@ -50,7 +47,7 @@
         </Grid>
       </GroupBox>
 
-      <GroupBox Grid.Row="1">
+      <GroupBox Grid.Row="1" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Название презентации</Label>
         </GroupBox.Header>
@@ -58,7 +55,7 @@
         <TextBox Name="PresentationName" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
       </GroupBox>
 
-      <GroupBox Grid.Row="2">
+      <GroupBox Grid.Row="2" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Заголовок презентации</Label>
         </GroupBox.Header>
@@ -66,15 +63,20 @@
         <TextBox Name="PresentationTitle" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
       </GroupBox>
 
-    <GroupBox Grid.Row="3">
+      <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible">
+        <StackPanel Name="PresentationPanel" Orientation="Vertical">
+        </StackPanel>
+      </ScrollViewer>
+
+      <GroupBox Grid.Row="1">
         <GroupBox.Header>
-                    <Label>Login</Label>
+          <Label>Login</Label>
         </GroupBox.Header>
 
         <TextBox Name="Login" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
-    </GroupBox>
+      </GroupBox>
 
-            <!---Можно выпилить. Из старой версии-->
+      <!---Можно выпилить. Из старой версии-->
       <GroupBox Grid.Row="3" Visibility="Collapsed">
         <GroupBox.Header>
           <Label>Url news (Необязательное)</Label>
@@ -93,15 +95,17 @@
                 SelectedIndex="0" Name="CategorieComboBox"/>
       </GroupBox>
 
-      <DockPanel Grid.Row="5" Margin="5" LastChildFill="True">
+      <DockPanel Grid.Row="2" Margin="5" LastChildFill="True">
 
         <!---Можно выпилить. Из старой версии-->
         <Button Height="30" Margin="10 0 0 0" Width="30" DockPanel.Dock="Right" Click="Button_Click" Visibility="Collapsed">
           <Image Source="/Resource/settings.png" />
         </Button>
-        
+
+        <Button Content="Добавить" Click="ButtonBase_OnClick" Height="30" HorizontalAlignment="Stretch" DockPanel.Dock="Right" Margin="5 0 0 0" />
         <Button Content="Распарсить презентацию" Click="Button_Click_2" Height="30" HorizontalAlignment="Stretch" />
       </DockPanel>
     </Grid>
+
   </Grid>
 </Controls:MetroWindow>
