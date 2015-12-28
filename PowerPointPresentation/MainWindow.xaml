@@ -85,16 +85,6 @@
         <TextBox Name="UrlNews" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
       </GroupBox>
 
-      <!---Можно выпилить. Из старой версии-->
-      <GroupBox Grid.Row="4" Visibility="Collapsed">
-        <GroupBox.Header>
-          <Label>Категория презентации</Label>
-        </GroupBox.Header>
-
-        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=Categories}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="5"
-                SelectedIndex="0" Name="CategorieComboBox"/>
-      </GroupBox>
-
       <DockPanel Grid.Row="2" Margin="5" LastChildFill="True">
 
         <!---Можно выпилить. Из старой версии-->
@@ -102,8 +92,8 @@
           <Image Source="/Resource/settings.png" />
         </Button>
 
-        <Button Content="Добавить" Click="ButtonBase_OnClick" Height="30" HorizontalAlignment="Stretch" DockPanel.Dock="Right" Margin="5 0 0 0" />
-        <Button Content="Распарсить презентацию" Click="Button_Click_2" Height="30" HorizontalAlignment="Stretch" />
+        <Button Content="Добавить" Click="ButtonAdd_OnClick" Height="30" HorizontalAlignment="Stretch" DockPanel.Dock="Right" Margin="5 0 0 0" />
+        <Button Name="ParsePresentationButton" Content="Распарсить презентацию" Click="Button_Click_2" Height="30" HorizontalAlignment="Stretch" />
       </DockPanel>
     </Grid>
 

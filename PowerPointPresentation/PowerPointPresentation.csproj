@@ -95,6 +95,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseTable.cs" />
+    <Compile Include="PresentationControl\PresenationData.cs" />
     <Compile Include="Ftp.cs" />
     <Compile Include="InternetTime.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -106,6 +107,7 @@
     </Compile>
     <Compile Include="Lib\LicenseVerifier.cs" />
     <Compile Include="MySQLPresentationTable.cs" />
+    <Compile Include="PresentationControl\PresentationControlState.cs" />
     <Compile Include="Views\PresentationControl.xaml.cs">
       <DependentUpon>PresentationControl.xaml</DependentUpon>
     </Compile>

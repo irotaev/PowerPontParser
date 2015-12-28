@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignWidth="300">
-  
-  <Border BorderThickness="2 2 2 2" BorderBrush="Black" Margin="5">
+             d:DesignWidth="300">  
+
+  <Border BorderThickness="1 1 1 1" BorderBrush="DimGray" Margin="5">
     <Grid Margin="3" Name="PresentationGrid">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="25"/>
@@ -16,15 +16,15 @@
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
+        <!--<RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>-->
       </Grid.RowDefinitions>
 
-      <Button Width="22" Grid.Column="0" Grid.RowSpan="2" Click="ButtonBase_OnClick">
+      <Button Width="22" Grid.Column="0" Grid.RowSpan="3" Click="ButtonRemove_OnClick">
         <Image Source="/Resource/close.png" />
-       </Button>
-      
+      </Button>
+
       <GroupBox Grid.Row="0" Grid.Column="1">
         <GroupBox.Header>
           <Label>Файл с презентацией</Label>
@@ -37,8 +37,17 @@
           </Grid.ColumnDefinitions>
 
           <TextBlock Margin="5" Grid.Column="0" Name="PresentationFileName" TextWrapping="Wrap"  Height="15"/>
-          <Button Margin="0 5 5 5" Grid.Column="1" Content="Выбрать" />
+          <Button Margin="0 5 5 5" Grid.Column="1" Content="Выбрать" Click="ButtonBase_OnClick" />
         </Grid>
+      </GroupBox>
+
+      <GroupBox Grid.Row="4" Grid.Column="1">
+        <GroupBox.Header>
+          <Label>Категория презентации</Label>
+        </GroupBox.Header>
+
+        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=Categories}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="5"
+                SelectedIndex="0" Name="CategorieComboBox"/>
       </GroupBox>
 
       <GroupBox Grid.Row="1" Grid.Column="1">
@@ -65,16 +74,6 @@
         </GroupBox.Header>
 
         <TextBox Name="UrlNews" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
-      </GroupBox>
-
-      <!---Можно выпилить. Из старой версии-->
-      <GroupBox Grid.Row="4" Visibility="Collapsed">
-        <GroupBox.Header>
-          <Label>Категория презентации</Label>
-        </GroupBox.Header>
-
-        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=Categories}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="5"
-                SelectedIndex="0" Name="CategorieComboBox"/>
       </GroupBox>
     </Grid>
   </Border>

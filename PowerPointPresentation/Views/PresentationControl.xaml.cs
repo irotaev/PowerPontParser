@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PowerPointPresentation.Control;
+using PowerPointPresentation.PresentationControl;
 
 namespace PowerPointPresentation.Views
 {
@@ -19,14 +21,57 @@ namespace PowerPointPresentation.Views
   /// </summary>
   public partial class PresentationControl : UserControl
   {
-    public PresentationControl()
+    public PresentationControl(MainWindow window, Dictionary<Categortie, string> categories)
     {
+      _window = window;
+      ControlState = PresentationControlState.WaitingExecution;
+
+      Categories = categories;
+
       InitializeComponent();
+
+      PresentationFileName.Text = "Файл не выбран";
+    }
+
+    private readonly MainWindow _window;
+    private string _presentationFullPath;
+    public Dictionary<Categortie, string> Categories { get; set; }
+
+    internal PresentationControlState ControlState { get; set; }
+
+    private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
+    {
+      ((Panel)this.Parent).Children.Remove(this);
+
+      _window.RemoveControl(this);
+    }
+
+    public PresentationData GetData()
+    {
+      return new PresentationData
+      {
+        Category = CategorieComboBox.SelectedItem,
+        PresentationFullPath = _presentationFullPath,
+        PresentationName = PresentationName.Text
+      };
     }
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
-      ((Panel)this.Parent).Children.Remove(this);
+      Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+
+      string allFileFormatsString = String.Join(";", PPTFiles.SupportedPowerPointFileFormats.Concat(PPTFiles.SupportedArchiveFormats).Select(el => { return "*" + el; }));
+
+      dialog.DefaultExt = ".ppt";
+      dialog.Filter = String.Format("Презентация или архив power point|{0}", allFileFormatsString);
+
+      bool? result = dialog.ShowDialog();
+
+      if (result == true)
+      {
+        PresentationFileName.Text = System.IO.Path.GetFileName(dialog.FileName);
+        _presentationFullPath = dialog.FileName;
+      }
     }
   }
 }
