@@ -21,31 +21,48 @@ namespace PowerPointPresentation
     #region Methods
     public override long GetCurrentPresentationIndex()
     {
-      long id = 0;
+      //long id = 0;
 
-      MySqlCommand command = _MySqlConnection.CreateCommand();
-      command.CommandText = String.Format("SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = '{0}'", _TableName);
-      //command.CommandText = String.Format("SELECT id FROM `{0}` ORDER BY `id` DESC", _TableName);
+      //MySqlCommand command = _MySqlConnection.CreateCommand();
+      //command.CommandText = String.Format("SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = '{0}'", _TableName);
+      ////command.CommandText = String.Format("SELECT id FROM `{0}` ORDER BY `id` DESC", _TableName);
+
+      //try
+      //{
+      //  using (var reader = command.ExecuteReader())
+      //  {
+      //    if (reader.HasRows)
+      //    {
+      //      while (reader.Read() && id == 0)
+      //      {
+      //        id = Int64.Parse(reader["auto_increment"].ToString());
+      //      }
+      //    }
+      //  }
+      //}
+      //catch
+      //{
+      //  id = 0;
+      //}
+
+      //return id;
 
       try
       {
-        using (var reader = command.ExecuteReader())
-        {
-          if (reader.HasRows)
-          {
-            while (reader.Read() && id == 0)
-            {
-              id = Int64.Parse(reader["auto_increment"].ToString());
-            }
-          }
-        }
-      }
-      catch
-      {
-        id = 0;
-      }
+        MySqlCommand command = _MySqlConnection.CreateCommand();
+        command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
+          INSERT INTO `{0}` (`naz`, `title`, `size`, `slides`, `content`, `login`)
+           VALUES ('', '', '', '', '', '')
+        ", SecurityElement.Escape(_TableName));
 
-      return id;
+        command.ExecuteNonQuery();
+
+        return command.LastInsertedId;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(String.Format("Во время заполнения таблицы 'main' презентацией '{0}' произошла ошибка: {1}", ex.Message));
+      }
     }
 
     private string FormContentDbColumn(PresentationInfo presInfo)
@@ -100,9 +117,20 @@ namespace PowerPointPresentation
       try
       {
         MySqlCommand command = _MySqlConnection.CreateCommand();
+//        command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
+//          INSERT INTO `{6}` (`naz`, `title`, `size`, `slides`, `content`, `login`)
+//           VALUES ('{0}', '{1}', '{2:0.00}', '{3}', '{4}', '{5}')
+//        ",
+//         SecurityElement.Escape(presInfo.Name),
+//         SecurityElement.Escape(presInfo.Title),
+//         Convert.ToSingle(presInfo.FileSize / 1024 / 1024, System.Globalization.CultureInfo.InvariantCulture),
+//         SecurityElement.Escape(presInfo.SlidersInfo.Count.ToString()),
+//         SecurityElement.Escape(FormContentDbColumn(presInfo)),
+//         SecurityElement.Escape(presInfo.Login),
+//         SecurityElement.Escape(_TableName));
         command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
-          INSERT INTO `{6}` (`naz`, `title`, `size`, `slides`, `content`, `login`)
-           VALUES ('{0}', '{1}', '{2:0.00}', '{3}', '{4}', '{5}')
+          UPDATE `{6}` SET `naz`='{0}', `title`='{1}', `size`='{2:0.00}', `slides`='{3}', `content`='{4}', `login`='{5}'
+           WHERE `id`='{7}'
         ",
          SecurityElement.Escape(presInfo.Name),
          SecurityElement.Escape(presInfo.Title),
@@ -110,7 +138,8 @@ namespace PowerPointPresentation
          SecurityElement.Escape(presInfo.SlidersInfo.Count.ToString()),
          SecurityElement.Escape(FormContentDbColumn(presInfo)),
          SecurityElement.Escape(presInfo.Login),
-         SecurityElement.Escape(_TableName));
+         SecurityElement.Escape(_TableName),
+         SecurityElement.Escape(presInfo.DbId.ToString()));
 
         command.ExecuteNonQuery();
       }

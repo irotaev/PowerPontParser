@@ -4,77 +4,83 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignWidth="300">  
+             d:DesignWidth="300">
 
-  <Border BorderThickness="1 1 1 1" BorderBrush="DimGray" Margin="5">
-    <Grid Margin="3" Name="PresentationGrid">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="25"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <!--<RowDefinition Height="*"/>
+  <Border BorderThickness="1 20 1 1" BorderBrush="#484A4A" Margin="5" Name="Border">
+    <Grid Name="PresentationGridWrapper">
+      
+      <TextBlock Name="ProgressInfo" Grid.Row="0" Grid.Column="0" Text="323232" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" FontSize="16" Foreground="Green" TextWrapping="Wrap" Visibility="Collapsed"/>
+      <ProgressBar Name="ProgressBar" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="150"  Margin="0 0 0 20" Height="15" Visibility="Collapsed" />
+
+      <Grid Margin="3" Name="PresentationGrid" Grid.Row="0" Grid.Column="0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="25"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+          <!--<RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>-->
-      </Grid.RowDefinitions>
+        </Grid.RowDefinitions>
 
-      <Button Width="22" Grid.Column="0" Grid.RowSpan="3" Click="ButtonRemove_OnClick">
-        <Image Source="/Resource/close.png" />
-      </Button>
+        <Button Width="22" Grid.Column="0" Grid.RowSpan="3" Click="ButtonRemove_OnClick">
+          <Image Source="/Resource/close.png" />
+        </Button>
 
-      <GroupBox Grid.Row="0" Grid.Column="1">
-        <GroupBox.Header>
-          <Label>Файл с презентацией</Label>
-        </GroupBox.Header>
+        <GroupBox Grid.Row="0" Grid.Column="1">
+          <GroupBox.Header>
+            <Label>Файл с презентацией</Label>
+          </GroupBox.Header>
 
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="1*" />
-          </Grid.ColumnDefinitions>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="2*" />
+              <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
 
-          <TextBlock Margin="5" Grid.Column="0" Name="PresentationFileName" TextWrapping="Wrap"  Height="15"/>
-          <Button Margin="0 5 5 5" Grid.Column="1" Content="Выбрать" Click="ButtonBase_OnClick" />
-        </Grid>
-      </GroupBox>
+            <TextBlock Margin="5" Grid.Column="0" Name="PresentationFileName" TextWrapping="Wrap"  Height="15"/>
+            <Button Margin="0 5 5 5" Grid.Column="1" Content="Выбрать" Click="ButtonBase_OnClick" />
+          </Grid>
+        </GroupBox>
 
-      <GroupBox Grid.Row="4" Grid.Column="1">
-        <GroupBox.Header>
-          <Label>Категория презентации</Label>
-        </GroupBox.Header>
+        <GroupBox Grid.Row="4" Grid.Column="1">
+          <GroupBox.Header>
+            <Label>Категория презентации</Label>
+          </GroupBox.Header>
 
-        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=Categories}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="5"
+          <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=Categories}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="5"
                 SelectedIndex="0" Name="CategorieComboBox"/>
-      </GroupBox>
+        </GroupBox>
 
-      <GroupBox Grid.Row="1" Grid.Column="1">
-        <GroupBox.Header>
-          <Label>Название презентации</Label>
-        </GroupBox.Header>
+        <GroupBox Grid.Row="1" Grid.Column="1">
+          <GroupBox.Header>
+            <Label>Название презентации</Label>
+          </GroupBox.Header>
 
-        <TextBox Name="PresentationName" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
-      </GroupBox>
+          <TextBox Name="PresentationName" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
+        </GroupBox>
 
-      <!---Можно выпилить. Из старой версии-->
-      <GroupBox Grid.Row="2" Visibility="Collapsed">
-        <GroupBox.Header>
-          <Label>Заголовок презентации</Label>
-        </GroupBox.Header>
+        <!---Можно выпилить. Из старой версии-->
+        <GroupBox Grid.Row="2" Visibility="Collapsed">
+          <GroupBox.Header>
+            <Label>Заголовок презентации</Label>
+          </GroupBox.Header>
 
-        <TextBox Name="PresentationTitle" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
-      </GroupBox>
+          <TextBox Name="PresentationTitle" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
+        </GroupBox>
 
-      <!---Можно выпилить. Из старой версии-->
-      <GroupBox Grid.Row="3" Visibility="Collapsed">
-        <GroupBox.Header>
-          <Label>Url news (Необязательное)</Label>
-        </GroupBox.Header>
+        <!---Можно выпилить. Из старой версии-->
+        <GroupBox Grid.Row="3" Visibility="Collapsed">
+          <GroupBox.Header>
+            <Label>Url news (Необязательное)</Label>
+          </GroupBox.Header>
 
-        <TextBox Name="UrlNews" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
-      </GroupBox>
+          <TextBox Name="UrlNews" Height="50" AcceptsReturn="True" TextWrapping="Wrap" Margin="5 0 5 0" />
+        </GroupBox>
+      </Grid>
     </Grid>
   </Border>
 </UserControl>

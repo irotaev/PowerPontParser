@@ -108,6 +108,7 @@
     <Compile Include="Lib\LicenseVerifier.cs" />
     <Compile Include="MySQLPresentationTable.cs" />
     <Compile Include="PresentationControl\PresentationControlState.cs" />
+    <Compile Include="Transport\ParseProgressStatus.cs" />
     <Compile Include="Views\PresentationControl.xaml.cs">
       <DependentUpon>PresentationControl.xaml</DependentUpon>
     </Compile>

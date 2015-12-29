@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -41,15 +42,14 @@ namespace PowerPointPresentation.Views
 
     private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
     {
-      ((Panel)this.Parent).Children.Remove(this);
-
       _window.RemoveControl(this);
     }
-
+    
     public PresentationData GetData()
     {
       return new PresentationData
       {
+        PresentationControl = this,
         Category = CategorieComboBox.SelectedItem,
         PresentationFullPath = _presentationFullPath,
         PresentationName = PresentationName.Text

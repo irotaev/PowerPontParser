@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
   <ExportDBInfo>
-    <DBRemoteHost>144.76.96.133</DBRemoteHost>
-    <DBName>lusana</DBName>
-    <DBUser>lusana</DBUser>
+    <DBRemoteHost>181.114.240.39</DBRemoteHost>
+    <DBName>ppt</DBName>
+    <DBUser>user1</DBUser>
     <DBPassword>zaraza</DBPassword>
   </ExportDBInfo>
 
