@@ -22,7 +22,7 @@ namespace PowerPointPresentation.Views
   /// </summary>
   public partial class PresentationControl : UserControl
   {
-    public PresentationControl(MainWindow window, Dictionary<Categortie, string> categories)
+    public PresentationControl(MainWindow window, Dictionary<string, string> categories)
     {
       _window = window;
       ControlState = PresentationControlState.WaitingExecution;
@@ -36,7 +36,7 @@ namespace PowerPointPresentation.Views
 
     private readonly MainWindow _window;
     private string _presentationFullPath;
-    public Dictionary<Categortie, string> Categories { get; set; }
+    public Dictionary<string, string> Categories { get; set; }
 
     internal PresentationControlState ControlState { get; set; }
 

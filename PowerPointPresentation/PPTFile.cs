@@ -278,12 +278,12 @@ namespace PowerPointPresentation
 
         {
           string slideImageNameBig = (i + 1).ToString() + ".jpg";
-          string slidePath = SlideInfo.GetLocalImageDirectoryAbsolutePath(_PresentationInfo.DbId, "573");
+          string slidePath = SlideInfo.GetLocalImageDirectoryAbsolutePath(_PresentationInfo.DbId, "653");
 
           if (!Directory.Exists(slidePath))
             Directory.CreateDirectory(slidePath);
 
-          _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameBig), "JPG", 573, 430);
+          _Presentation.Slides[i + 1].Export(Path.Combine(slidePath, slideImageNameBig), "JPG", 653, 490);
           slideInfo.ImageNameClientBig = slideImageNameBig;
         }
 
@@ -492,111 +492,134 @@ namespace PowerPointPresentation
     public string ImageNameServerBig { get; set; }
   }
 
-  /// <summary>
-  /// Категории
-  /// </summary>
-  public enum Categortie
+  public class Categortie
   {
-    NA = -1,
-    anglijskij_jazyk = 0,
-    astronomija = 1,
-    algebra = 2,
-    biologija = 4,
-    geografija = 5,
-    geometrija = 6,
-    informatika = 7,
-    istorija = 8,
-    literatura = 9,
-    matematika = 10,
-    medicina = 11,
-    mhk_i_izo = 12,
-    muzyka = 13,
-    obzh = 14,
-    obshhestvoznanie = 15,
-    okruzhajushhij_mir = 16,
-    pedagogika = 17,
-    russkij_jazyk = 18,
-    tehnologija = 19,
-    ukrainskij_jazyk = 20,
-    fizika = 21,
-    fizkultura = 22,
-    filosofija = 23,
-    himija = 24,
-    jekologija = 25,
-    jekonomika = 26,
-    detskie_prezentacii = 27
-  }
+    public const string CATEGORIES_FILE_NAME = "categories.json";
 
-  /// <summary>
-  /// Конвертирует перечеслитель
-  /// </summary>
-  public class EnumConverter
-  {
-    public static string Categorie(Categortie categorie)
+    [ThreadStatic] public static Dictionary<string, string> Categories;
+
+    public static Dictionary<string, string> LoadFromFile()
     {
-      switch (categorie)
+      try
       {
-        case Categortie.anglijskij_jazyk:
-          return "Английский язык";
-        case Categortie.astronomija:
-          return "Астрономия";
-        case Categortie.algebra:
-          return "Алгебра";
-        case Categortie.biologija:
-          return "Биология";
-        case Categortie.geografija:
-          return "География";
-        case Categortie.geometrija:
-          return "Геометрия";
-        case Categortie.informatika:
-          return "Информатика";
-        case Categortie.istorija:
-          return "История";
-        case Categortie.literatura:
-          return "Литература";
-        case Categortie.matematika:
-          return "Математика";
-        case Categortie.medicina:
-          return "Медицина";
-        case Categortie.mhk_i_izo:
-          return "МХК и ИЗО";
-        case Categortie.muzyka:
-          return "Музыка";
-        case Categortie.obzh:
-          return "ОБЖ";
-        case Categortie.obshhestvoznanie:
-          return "Обществознание";
-        case Categortie.okruzhajushhij_mir:
-          return "Окружающий мир";
-        case Categortie.pedagogika:
-          return "Педагогика";
-        case Categortie.russkij_jazyk:
-          return "Русский язык";
-        case Categortie.tehnologija:
-          return "Технология";
-        case Categortie.ukrainskij_jazyk:
-          return "Украинский язык";
-        case Categortie.fizika:
-          return "Физика";
-        case Categortie.fizkultura:
-          return "Физкультура";
-        case Categortie.filosofija:
-          return "Философия";
-        case Categortie.himija:
-          return "Химия";
-        case Categortie.jekologija:
-          return "Экология";
-        case Categortie.jekonomika:
-          return "Экономика";
-        case Categortie.detskie_prezentacii:
-          return "Детские презентации";
-        case Categortie.NA:
-          return "Не выбрана";
-        default:
-          return "Не задан конвертер";
+        var json = File.ReadAllText(CATEGORIES_FILE_NAME);
+
+        Categories = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+        return Categories;
+      }
+      catch (Exception ex)
+      {
+        throw new ApplicationException(string.Format("Во время загрузки категорий [{0}] из файла произошла непредвиденная ошибка, {1}", CATEGORIES_FILE_NAME, ex.Message));
       }
     }
   }
+
+  /// <summary>
+  /// Категории
+  /// </summary>
+  //public enum Categortie
+  //{
+  //  NA = -1,
+  //  anglijskij_jazyk = 0,
+  //  astronomija = 1,
+  //  algebra = 2,
+  //  biologija = 4,
+  //  geografija = 5,
+  //  geometrija = 6,
+  //  informatika = 7,
+  //  istorija = 8,
+  //  literatura = 9,
+  //  matematika = 10,
+  //  medicina = 11,
+  //  mhk_i_izo = 12,
+  //  muzyka = 13,
+  //  obzh = 14,
+  //  obshhestvoznanie = 15,
+  //  okruzhajushhij_mir = 16,
+  //  pedagogika = 17,
+  //  russkij_jazyk = 18,
+  //  tehnologija = 19,
+  //  ukrainskij_jazyk = 20,
+  //  fizika = 21,
+  //  fizkultura = 22,
+  //  filosofija = 23,
+  //  himija = 24,
+  //  jekologija = 25,
+  //  jekonomika = 26,
+  //  detskie_prezentacii = 27
+  //}
+
+  ///// <summary>
+  ///// Конвертирует перечеслитель
+  ///// </summary>
+  //public class EnumConverter
+  //{
+  //  public static string Categorie(Categortie categorie)
+  //  {
+  //    switch (categorie)
+  //    {
+  //      case Categortie.anglijskij_jazyk:
+  //        return "Английский язык";
+  //      case Categortie.astronomija:
+  //        return "Астрономия";
+  //      case Categortie.algebra:
+  //        return "Алгебра";
+  //      case Categortie.biologija:
+  //        return "Биология";
+  //      case Categortie.geografija:
+  //        return "География";
+  //      case Categortie.geometrija:
+  //        return "Геометрия";
+  //      case Categortie.informatika:
+  //        return "Информатика";
+  //      case Categortie.istorija:
+  //        return "История";
+  //      case Categortie.literatura:
+  //        return "Литература";
+  //      case Categortie.matematika:
+  //        return "Математика";
+  //      case Categortie.medicina:
+  //        return "Медицина";
+  //      case Categortie.mhk_i_izo:
+  //        return "МХК и ИЗО";
+  //      case Categortie.muzyka:
+  //        return "Музыка";
+  //      case Categortie.obzh:
+  //        return "ОБЖ";
+  //      case Categortie.obshhestvoznanie:
+  //        return "Обществознание";
+  //      case Categortie.okruzhajushhij_mir:
+  //        return "Окружающий мир";
+  //      case Categortie.pedagogika:
+  //        return "Педагогика";
+  //      case Categortie.russkij_jazyk:
+  //        return "Русский язык";
+  //      case Categortie.tehnologija:
+  //        return "Технология";
+  //      case Categortie.ukrainskij_jazyk:
+  //        return "Украинский язык";
+  //      case Categortie.fizika:
+  //        return "Физика";
+  //      case Categortie.fizkultura:
+  //        return "Физкультура";
+  //      case Categortie.filosofija:
+  //        return "Философия";
+  //      case Categortie.himija:
+  //        return "Химия";
+  //      case Categortie.jekologija:
+  //        return "Экология";
+  //      case Categortie.jekonomika:
+  //        return "Экономика";
+  //      case Categortie.detskie_prezentacii:
+  //        return "Детские презентации";
+  //      case Categortie.NA:
+  //        return "Не выбрана";
+  //      default:
+  //        return "Не задан конвертер";
+  //    }
+  //  }
+  //}
 
   /// <summary>
   /// Информации при заверщении парсинга слайда

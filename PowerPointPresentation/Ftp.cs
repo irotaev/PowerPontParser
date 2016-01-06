@@ -101,10 +101,10 @@ namespace PowerPointPresentation
 
         if (!String.IsNullOrEmpty(slideInfo.ImageNameClientBig))
         {
-          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString(), "573"));
+          CreateFtpFolder(Path.Combine(_UploadImagesBaseDir, FilesServerDir, presInfo.DbId.ToString(), "653"));
           UploadImage(
-            Path.Combine(SlideInfo.GetLocalImageDirectoryAbsolutePath(presInfo.DbId, "573"), slideInfo.ImageNameClientBig),
-            String.Format("{0}/{1}/573/{2}", FilesServerDir, presInfo.DbId, slideInfo.ImageNameClientBig));
+            Path.Combine(SlideInfo.GetLocalImageDirectoryAbsolutePath(presInfo.DbId, "653"), slideInfo.ImageNameClientBig),
+            String.Format("{0}/{1}/653/{2}", FilesServerDir, presInfo.DbId, slideInfo.ImageNameClientBig));
         }
 
         if (UploadImageCompleteCallback != null)
