@@ -44,7 +44,7 @@ namespace PowerPointPresentation.Views
     {
       _window.RemoveControl(this);
     }
-    
+
     public PresentationData GetData()
     {
       return new PresentationData
@@ -54,6 +54,38 @@ namespace PowerPointPresentation.Views
         PresentationFullPath = _presentationFullPath,
         PresentationName = PresentationName.Text
       };
+    }
+
+    public bool Validate(out string message)
+    {
+      var isValid = true;
+
+      var data = GetData();
+
+      message = string.Empty;
+
+      if (string.IsNullOrWhiteSpace(data.PresentationFullPath))
+      {
+        isValid = false;
+        message += "Необходимо выбрать файл с презентацией\n";
+      }
+
+      if (string.IsNullOrWhiteSpace(data.PresentationName))
+      {
+        isValid = false;
+        message += "Необходимо заполнить название презентации\n";
+      }
+
+      if (data.Category == null || ((KeyValuePair<string, string>)data.Category).Key == "NA")
+      {
+        isValid = false;
+        message += "Необходимо выбрать категорию презентации\n";
+      }
+
+      if (!isValid)
+        Border.BorderBrush = Brushes.DarkRed;
+
+      return isValid;
     }
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -72,6 +104,11 @@ namespace PowerPointPresentation.Views
         PresentationFileName.Text = System.IO.Path.GetFileName(dialog.FileName);
         _presentationFullPath = dialog.FileName;
       }
+    }
+
+    private void Border_OnGotFocus(object sender, RoutedEventArgs e)
+    {
+      Border.BorderBrush = (Brush)new BrushConverter().ConvertFrom("#484A4A");
     }
   }
 }

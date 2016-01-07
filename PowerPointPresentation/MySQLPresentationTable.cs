@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PowerPointPresentation
 {
   public class MySQLPresentationTable : AbstractDBTable
   {
+    public static volatile bool IsTableCreated;
+
     /// <summary>
     /// Создать объект таблицы презентации
     /// </summary>
@@ -21,38 +24,12 @@ namespace PowerPointPresentation
     #region Methods
     public override long GetCurrentPresentationIndex()
     {
-      //long id = 0;
-
-      //MySqlCommand command = _MySqlConnection.CreateCommand();
-      //command.CommandText = String.Format("SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = '{0}'", _TableName);
-      ////command.CommandText = String.Format("SELECT id FROM `{0}` ORDER BY `id` DESC", _TableName);
-
-      //try
-      //{
-      //  using (var reader = command.ExecuteReader())
-      //  {
-      //    if (reader.HasRows)
-      //    {
-      //      while (reader.Read() && id == 0)
-      //      {
-      //        id = Int64.Parse(reader["auto_increment"].ToString());
-      //      }
-      //    }
-      //  }
-      //}
-      //catch
-      //{
-      //  id = 0;
-      //}
-
-      //return id;
-
       try
       {
         MySqlCommand command = _MySqlConnection.CreateCommand();
         command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
-          INSERT INTO `{0}` (`naz`, `title`, `size`, `slides`, `content`, `login`)
-           VALUES ('', '', '', '', '', '')
+          INSERT INTO `{0}` (`naz`, `title`, `size`, `slides`, `content`, `login`, `url`, `cat`)
+           VALUES ('', '', '', '', '', '', '', '')
         ", SecurityElement.Escape(_TableName));
 
         command.ExecuteNonQuery();
@@ -86,8 +63,10 @@ namespace PowerPointPresentation
       return result;
     }
 
-    public override void PutDataOnServer(PresentationInfo presInfo)
+    public void CreateTable()
     {
+      if (IsTableCreated) return;
+
       #region Создание таблицы, если это необходимо
       try
       {
@@ -101,7 +80,11 @@ namespace PowerPointPresentation
                               `size` FLOAT NOT NULL,
                               `slides` SMALLINT NOT NULL,
                               `content` TEXT(1000) NOT NULL,  
-                              `login` VARCHAR(100) NULL,                            
+                              `login` VARCHAR(100) NULL,  
+                              `url` VARCHAR(255) NOT NULL,
+                              `like` MEDIUMINT NULL,
+                              `count` BIGINT NULL,                           
+                              `cat` VARCHAR(255) NOT NULL,
                               UNIQUE KEY (id)
                               ) CHARSET={1}", SecurityElement.Escape(_TableName), TABLE_CHARSET);
           command.ExecuteNonQuery();
@@ -113,6 +96,11 @@ namespace PowerPointPresentation
       }
       #endregion
 
+      IsTableCreated = true;
+    }
+
+    public override void PutDataOnServer(PresentationInfo presInfo)
+    {      
       #region Заполнение таблицы
       try
       {
@@ -129,7 +117,7 @@ namespace PowerPointPresentation
 //         SecurityElement.Escape(presInfo.Login),
 //         SecurityElement.Escape(_TableName));
         command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
-          UPDATE `{6}` SET `naz`='{0}', `title`='{1}', `size`='{2:0.00}', `slides`='{3}', `content`='{4}', `login`='{5}'
+          UPDATE `{6}` SET `naz`='{0}', `title`='{1}', `size`='{2:0.00}', `slides`='{3}', `content`='{4}', `login`='{5}', `url`='{8}', `cat`='{9}'
            WHERE `id`='{7}'
         ",
          SecurityElement.Escape(presInfo.Name),
@@ -139,7 +127,10 @@ namespace PowerPointPresentation
          SecurityElement.Escape(FormContentDbColumn(presInfo)),
          SecurityElement.Escape(presInfo.Login),
          SecurityElement.Escape(_TableName),
-         SecurityElement.Escape(presInfo.DbId.ToString()));
+         SecurityElement.Escape(presInfo.DbId.ToString()),
+         SecurityElement.Escape(Regex.Replace(presInfo.Name, @"[^\da-zA-Zа-яА-Я]", "_")),
+         SecurityElement.Escape(presInfo.Categorie.Key));
+         //SecurityElement.Escape(new JoZhTranslit.Transliterator(JoZhTranslit.TransliterationMaps.EnRu.MapJson).Transliterate(presInfo.Name)));
 
         command.ExecuteNonQuery();
       }

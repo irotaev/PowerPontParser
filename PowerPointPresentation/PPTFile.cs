@@ -64,7 +64,7 @@ namespace PowerPointPresentation
     /// <returns>Информация о презентации</returns>
     public PresentationInfo ExtractInfo(string ppFilePath, ILastInsertedPPTInfoId pptidInfo)
     {
-      PresentationInfo presInfo = null;
+      PresentationInfo presInfo = null;      
 
       long pptCurrentFileId = pptidInfo.GetCurrentPresentationIndex();
 
@@ -392,7 +392,7 @@ namespace PowerPointPresentation
     /// <summary>
     /// Категория презентации
     /// </summary>
-    public Categortie Categorie { get; set; }
+    public KeyValuePair<string,string> Categorie { get; set; }
     /// <summary>
     /// Уникальный Id презентации в базе данных
     /// </summary>

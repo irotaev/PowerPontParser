@@ -33,7 +33,7 @@
         </StackPanel>
       </ScrollViewer>
 
-      <GroupBox Grid.Row="1" Background="#BDBCB6">
+      <GroupBox Grid.Row="1" Background="#BDBCB6" Name="LoginGroupBox" GotFocus="LoginGroupBox_OnGotFocus">
         <GroupBox.Header>
           <Label>Login</Label>
         </GroupBox.Header>

@@ -21,11 +21,13 @@
     </Style>
   </UserControl.Resources>
 
-  <Border BorderThickness="1 10 1 1" BorderBrush="#484A4A" Margin="5" Name="Border">
+  <Border BorderThickness="1 10 1 1" BorderBrush="#484A4A" Margin="5" Name="Border" GotFocus="Border_OnGotFocus">
     <Grid Name="PresentationGridWrapper">
 
-      <TextBlock Name="ProgressInfo" Grid.Row="0" Grid.Column="0" Text="323232" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" FontSize="16" Foreground="Green" TextWrapping="Wrap" Visibility="Collapsed"/>
-      <ProgressBar Name="ProgressBar" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="150"  Margin="0 0 0 20" Height="15" Visibility="Collapsed" />
+      <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Name="ProgressInfo"  Text="323232" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="16" Foreground="Green" TextWrapping="Wrap" Visibility="Collapsed" />
+        <ProgressBar Name="ProgressBar" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="150"  Margin="0 0 0 0" Height="15" Visibility="Collapsed" />
+      </StackPanel>
 
       <DockPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="PresentationGrid">
 
