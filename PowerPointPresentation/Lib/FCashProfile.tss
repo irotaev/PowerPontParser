@@ -8,7 +8,7 @@
   </ExportDBInfo>
 
   <ExportFtpInfo>
-    <Host>144.76.96.133</Host>
+    <Host>181.114.240.39</Host>
     <UserName>zaraza</UserName>
     <UserPassword>zaraza</UserPassword>
     <ImagesDir>/www/test</ImagesDir>

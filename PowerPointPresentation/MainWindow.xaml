@@ -23,7 +23,7 @@
 
     <Grid Margin="3" Name="MainGrid">
       <Grid.RowDefinitions>
-        <RowDefinition Height="700"/>
+        <RowDefinition Height="500"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
@@ -58,7 +58,7 @@
         </Button>
 
         <Button Content="Добавить" Click="ButtonAdd_OnClick" Height="30" HorizontalAlignment="Stretch" DockPanel.Dock="Right" Margin="5 0 0 0" />
-        <Button Name="ParsePresentationButton" Content="Распарсить презентацию" Click="Button_Click_2" Height="30" HorizontalAlignment="Stretch" />
+        <Button Name="ParsePresentationButton" Content="Распарсить презентации" Click="Button_Click_2" Height="30" HorizontalAlignment="Stretch" />
       </DockPanel>
     </Grid>
 

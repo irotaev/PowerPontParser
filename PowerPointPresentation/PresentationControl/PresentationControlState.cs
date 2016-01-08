@@ -11,5 +11,9 @@ namespace PowerPointPresentation.PresentationControl
     /// Ожидание заполнения полей
     /// </summary>
     WaitingExecution = 0,
+    /// <summary>
+    /// Парсится
+    /// </summary>
+    InProgress = 1
   }
 }

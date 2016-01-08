@@ -64,7 +64,7 @@ namespace PowerPointPresentation
     /// <returns>Информация о презентации</returns>
     public PresentationInfo ExtractInfo(string ppFilePath, ILastInsertedPPTInfoId pptidInfo)
     {
-      PresentationInfo presInfo = null;      
+      PresentationInfo presInfo = null;
 
       long pptCurrentFileId = pptidInfo.GetCurrentPresentationIndex();
 
@@ -91,6 +91,9 @@ namespace PowerPointPresentation
               presInfo = pptFile.ParsePreesentation();
               isFileFound = true;
 
+              if (ParseSlideCompleteCallback != null)
+                pptFile.ParseSlideComplite -= ParseSlideCompleteCallback;
+
               FileInfo archiveInfo = new FileInfo(ppFilePath);
               presInfo.FileSize = archiveInfo.Length;
               break;
@@ -115,6 +118,9 @@ namespace PowerPointPresentation
           pptFile.ParseSlideComplite += ParseSlideCompleteCallback;
 
         presInfo = pptFile.ParsePreesentation();
+
+        if (ParseSlideCompleteCallback != null)
+          pptFile.ParseSlideComplite -= ParseSlideCompleteCallback;
 
         FileInfo fileInfo = new FileInfo(ppFilePath);
         presInfo.FileSize = fileInfo.Length;
@@ -147,7 +153,7 @@ namespace PowerPointPresentation
         else
           Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(path, tempCompressPath);
 
-        string compressedPresentationAbsoluteLocation = Path.Combine(Directory.GetCurrentDirectory(), _PresentationDir, "presentation.zip");
+        string compressedPresentationAbsoluteLocation = Path.Combine(Directory.GetCurrentDirectory(), _PresentationDir, Guid.NewGuid().ToString() + ".zip");
 
         new ICSharpCode.SharpZipLib.Zip.FastZip().CreateZip(compressedPresentationAbsoluteLocation, tempCompressPath, true, null, null);
 
@@ -183,6 +189,8 @@ namespace PowerPointPresentation
 
     public void Dispose()
     {
+      ParseSlideCompleteCallback = null;
+
       if (!_IsErrorExists)
       {
         ClearTemDir();
@@ -392,7 +400,7 @@ namespace PowerPointPresentation
     /// <summary>
     /// Категория презентации
     /// </summary>
-    public KeyValuePair<string,string> Categorie { get; set; }
+    public KeyValuePair<string, string> Categorie { get; set; }
     /// <summary>
     /// Уникальный Id презентации в базе данных
     /// </summary>
@@ -496,7 +504,8 @@ namespace PowerPointPresentation
   {
     public const string CATEGORIES_FILE_NAME = "categories.json";
 
-    [ThreadStatic] public static Dictionary<string, string> Categories;
+    [ThreadStatic]
+    public static Dictionary<string, string> Categories;
 
     public static Dictionary<string, string> LoadFromFile()
     {
@@ -514,112 +523,6 @@ namespace PowerPointPresentation
       }
     }
   }
-
-  /// <summary>
-  /// Категории
-  /// </summary>
-  //public enum Categortie
-  //{
-  //  NA = -1,
-  //  anglijskij_jazyk = 0,
-  //  astronomija = 1,
-  //  algebra = 2,
-  //  biologija = 4,
-  //  geografija = 5,
-  //  geometrija = 6,
-  //  informatika = 7,
-  //  istorija = 8,
-  //  literatura = 9,
-  //  matematika = 10,
-  //  medicina = 11,
-  //  mhk_i_izo = 12,
-  //  muzyka = 13,
-  //  obzh = 14,
-  //  obshhestvoznanie = 15,
-  //  okruzhajushhij_mir = 16,
-  //  pedagogika = 17,
-  //  russkij_jazyk = 18,
-  //  tehnologija = 19,
-  //  ukrainskij_jazyk = 20,
-  //  fizika = 21,
-  //  fizkultura = 22,
-  //  filosofija = 23,
-  //  himija = 24,
-  //  jekologija = 25,
-  //  jekonomika = 26,
-  //  detskie_prezentacii = 27
-  //}
-
-  ///// <summary>
-  ///// Конвертирует перечеслитель
-  ///// </summary>
-  //public class EnumConverter
-  //{
-  //  public static string Categorie(Categortie categorie)
-  //  {
-  //    switch (categorie)
-  //    {
-  //      case Categortie.anglijskij_jazyk:
-  //        return "Английский язык";
-  //      case Categortie.astronomija:
-  //        return "Астрономия";
-  //      case Categortie.algebra:
-  //        return "Алгебра";
-  //      case Categortie.biologija:
-  //        return "Биология";
-  //      case Categortie.geografija:
-  //        return "География";
-  //      case Categortie.geometrija:
-  //        return "Геометрия";
-  //      case Categortie.informatika:
-  //        return "Информатика";
-  //      case Categortie.istorija:
-  //        return "История";
-  //      case Categortie.literatura:
-  //        return "Литература";
-  //      case Categortie.matematika:
-  //        return "Математика";
-  //      case Categortie.medicina:
-  //        return "Медицина";
-  //      case Categortie.mhk_i_izo:
-  //        return "МХК и ИЗО";
-  //      case Categortie.muzyka:
-  //        return "Музыка";
-  //      case Categortie.obzh:
-  //        return "ОБЖ";
-  //      case Categortie.obshhestvoznanie:
-  //        return "Обществознание";
-  //      case Categortie.okruzhajushhij_mir:
-  //        return "Окружающий мир";
-  //      case Categortie.pedagogika:
-  //        return "Педагогика";
-  //      case Categortie.russkij_jazyk:
-  //        return "Русский язык";
-  //      case Categortie.tehnologija:
-  //        return "Технология";
-  //      case Categortie.ukrainskij_jazyk:
-  //        return "Украинский язык";
-  //      case Categortie.fizika:
-  //        return "Физика";
-  //      case Categortie.fizkultura:
-  //        return "Физкультура";
-  //      case Categortie.filosofija:
-  //        return "Философия";
-  //      case Categortie.himija:
-  //        return "Химия";
-  //      case Categortie.jekologija:
-  //        return "Экология";
-  //      case Categortie.jekonomika:
-  //        return "Экономика";
-  //      case Categortie.detskie_prezentacii:
-  //        return "Детские презентации";
-  //      case Categortie.NA:
-  //        return "Не выбрана";
-  //      default:
-  //        return "Не задан конвертер";
-  //    }
-  //  }
-  //}
 
   /// <summary>
   /// Информации при заверщении парсинга слайда

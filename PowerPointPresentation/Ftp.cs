@@ -117,7 +117,7 @@ namespace PowerPointPresentation
                                                                                _FTPHost,
                                                                                Path.Combine(_UploadImagesBaseDir, FilesServerDir),
                                                                                presInfo.DbId,
-                                                                               "presentation.zip"));
+                                                                               presInfo.UrlNews + ".zip"));
 
         request.UseBinary = true;
         request.Method = WebRequestMethods.Ftp.UploadFile;

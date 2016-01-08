@@ -37,7 +37,7 @@ namespace PowerPointPresentation
     {
       try
       {
-        _TableName = tableName;
+        _MainTableName = tableName;
 
         _MySqlConnection = new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};CharSet=utf8", hostName, dbName, userName, userPassword));
         _MySqlConnection.Open();
@@ -51,7 +51,7 @@ namespace PowerPointPresentation
     #region Properties
     public const string TABLE_CHARSET = "utf8mb4";
     protected readonly MySqlConnection _MySqlConnection;
-    protected readonly string _TableName;
+    protected readonly string _MainTableName;
     #endregion
 
     #region Methods
