@@ -166,7 +166,7 @@ namespace PowerPointPresentation
          SecurityElement.Escape(_MainTableName),
          SecurityElement.Escape(presInfo.DbId.ToString()),
          SecurityElement.Escape(Regex.Replace(presInfo.Name, @"[^\da-zA-Zа-яА-Я]", "_")),
-         SecurityElement.Escape(presInfo.Categorie.Key));
+         SecurityElement.Escape(presInfo.Categorie.Key != "NA" ? presInfo.Categorie.Key : null));
 
         command.ExecuteNonQuery();
       }
@@ -178,30 +178,37 @@ namespace PowerPointPresentation
 
       #region Заполнение таблицы категории
 
-      CreateCategoryTable(presInfo.Categorie.Key);
-
-      try
+      if (presInfo.Categorie.Key != "NA")
       {
-        MySqlCommand command = _MySqlConnection.CreateCommand();
-        command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
+        CreateCategoryTable(presInfo.Categorie.Key);
+
+        try
+        {
+          MySqlCommand command = _MySqlConnection.CreateCommand();
+          command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
           INSERT INTO `{6}` (`naz`, `title`, `size`, `slides`, `content`, `login`, `url`, `id`) VALUES('{0}', '{1}', '{2:0.00}', '{3}', '{4}', '{5}', '{8}', '{7}')
-        ",
-         SecurityElement.Escape(presInfo.Name),
-         SecurityElement.Escape(presInfo.Title),
-         Convert.ToSingle(presInfo.FileSize / 1024 / 1024, System.Globalization.CultureInfo.InvariantCulture),
-         SecurityElement.Escape(presInfo.SlidersInfo.Count.ToString()),
-         SecurityElement.Escape(FormContentDbColumn(presInfo)),
-         SecurityElement.Escape(presInfo.Login),
-         SecurityElement.Escape(presInfo.Categorie.Key), // Table name
-         SecurityElement.Escape(presInfo.DbId.ToString()),
-         SecurityElement.Escape(presInfo.UrlNews));
+          ",
+            SecurityElement.Escape(presInfo.Name),
+            SecurityElement.Escape(presInfo.Title),
+            Convert.ToSingle(presInfo.FileSize / 1024 / 1024, System.Globalization.CultureInfo.InvariantCulture),
+            SecurityElement.Escape(presInfo.SlidersInfo.Count.ToString()),
+            SecurityElement.Escape(FormContentDbColumn(presInfo)),
+            SecurityElement.Escape(presInfo.Login),
+            SecurityElement.Escape(presInfo.Categorie.Key), // Table name
+            SecurityElement.Escape(presInfo.DbId.ToString()),
+            SecurityElement.Escape(presInfo.UrlNews));
 
-        command.ExecuteNonQuery();
+          command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+          throw new Exception(
+            String.Format(
+              "Во время заполнения таблицы категории презентации '{0}' произошла непредвиденная ошибка: {1}",
+              presInfo.Categorie.Key, ex.Message));
+        }
       }
-      catch (Exception ex)
-      {
-        throw new Exception(String.Format("Во время заполнения таблицы категории презентации '{0}' произошла непредвиденная ошибка: {1}", presInfo.Categorie.Key, ex.Message));
-      }
+
       #endregion
     }
     #endregion

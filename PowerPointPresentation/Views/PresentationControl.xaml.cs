@@ -76,10 +76,10 @@ namespace PowerPointPresentation.Views
         message += "Необходимо заполнить название презентации\n";
       }
 
-      if (data.Category == null || ((KeyValuePair<string, string>)data.Category).Key == "NA")
+      if (data.Category == null)
       {
         isValid = false;
-        message += "Необходимо выбрать категорию презентации\n";
+        message += "Необходимо указать категорию презентации\n";
       }
 
       if (!isValid)
