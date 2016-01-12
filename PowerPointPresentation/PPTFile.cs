@@ -148,6 +148,11 @@ namespace PowerPointPresentation
         if (!Directory.Exists(tempCompressPath))
           Directory.CreateDirectory(tempCompressPath);
 
+        tempCompressPath = Path.Combine(tempCompressPath, Guid.NewGuid().ToString());
+
+        if (!Directory.Exists(tempCompressPath))
+          Directory.CreateDirectory(tempCompressPath);
+
         if (Path.HasExtension(path))
           File.Copy(path, Path.Combine(tempCompressPath, Path.GetFileName(path)));
         else

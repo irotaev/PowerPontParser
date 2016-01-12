@@ -95,6 +95,7 @@ namespace PowerPointPresentation
                               `like` MEDIUMINT NULL,
                               `count` BIGINT NULL,                           
                               `cat` VARCHAR(255) NOT NULL,
+                              `poxpres` TEXT NULL,
                               UNIQUE KEY (id)
                               ) CHARSET={1}", SecurityElement.Escape(_MainTableName), TABLE_CHARSET);
           command.ExecuteNonQuery();
@@ -131,8 +132,9 @@ namespace PowerPointPresentation
                               `content` TEXT(1000) NOT NULL,  
                               `login` VARCHAR(100) NULL,  
                               `url` VARCHAR(255) NOT NULL,
-                              `like` MEDIUMINT NULL,
-                              `count` BIGINT NULL,                                                         
+                              `like` MEDIUMINT NOT NULL,
+                              `count` BIGINT NOT NULL,  
+                              `poxpres` TEXT NULL,                                                       
                               UNIQUE KEY (id)
                               ) CHARSET={1}", SecurityElement.Escape(tableName), TABLE_CHARSET);
           command.ExecuteNonQuery();
@@ -154,7 +156,7 @@ namespace PowerPointPresentation
       {
         MySqlCommand command = _MySqlConnection.CreateCommand();
         command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
-          UPDATE `{6}` SET `naz`='{0}', `title`='{1}', `size`='{2:0.00}', `slides`='{3}', `content`='{4}', `login`='{5}', `url`='{8}', `cat`='{9}'
+          UPDATE `{6}` SET `naz`='{0}', `title`='{1}', `size`='{2:0.00}', `slides`='{3}', `content`='{4}', `login`='{5}', `url`='{8}', `cat`='{9}', `like`='0', `count`='1'
            WHERE `id`='{7}'
         ",
          SecurityElement.Escape(presInfo.Name),
@@ -165,7 +167,7 @@ namespace PowerPointPresentation
          SecurityElement.Escape(presInfo.Login),
          SecurityElement.Escape(_MainTableName),
          SecurityElement.Escape(presInfo.DbId.ToString()),
-         SecurityElement.Escape(Regex.Replace(presInfo.Name, @"[^\da-zA-Zа-яА-Я]", "_")),
+         SecurityElement.Escape(presInfo.UrlNews),
          SecurityElement.Escape(presInfo.Categorie.Key != "NA" ? presInfo.Categorie.Key : null));
 
         command.ExecuteNonQuery();
@@ -186,7 +188,7 @@ namespace PowerPointPresentation
         {
           MySqlCommand command = _MySqlConnection.CreateCommand();
           command.CommandText = String.Format(new System.Globalization.CultureInfo("en-GB"), @"
-          INSERT INTO `{6}` (`naz`, `title`, `size`, `slides`, `content`, `login`, `url`, `id`) VALUES('{0}', '{1}', '{2:0.00}', '{3}', '{4}', '{5}', '{8}', '{7}')
+          INSERT INTO `{6}` (`naz`, `title`, `size`, `slides`, `content`, `login`, `url`, `id`, `like`, `count`) VALUES('{0}', '{1}', '{2:0.00}', '{3}', '{4}', '{5}', '{8}', '{7}', '0', '1')
           ",
             SecurityElement.Escape(presInfo.Name),
             SecurityElement.Escape(presInfo.Title),

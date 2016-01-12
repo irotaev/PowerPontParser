@@ -11,6 +11,6 @@
     <Host>181.114.240.39</Host>
     <UserName>zaraza</UserName>
     <UserPassword>zaraza</UserPassword>
-    <ImagesDir>/www/test</ImagesDir>
+    <ImagesDir>/www/test2</ImagesDir>
   </ExportFtpInfo>
 </root>
